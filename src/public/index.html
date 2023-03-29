@@ -8,8 +8,8 @@
     <title>Página principal</title>
 </head>
 <body>
-    <h3>Ingrese los datos del producto a agregar</h3>
-    <form action="/api/products" method="POST" enctype="multipart/form-data">
+    <h3 class="new_product_title">Ingrese los datos del producto a agregar</h3>
+    <form action="/api/products" method="POST" enctype="multipart/form-data" class="form_new_product">
         <label>Nombre</label>
         <input name="name" required>
         <label>Descripción</label>
@@ -24,7 +24,7 @@
         <input name="code" required>
         <label>Stock disponible</label>
         <input name="stock" type="number" required>
-        <input type="submit">
+        <input type="submit" id="new_product_submit">
     </form>
 
     <script src="./js/index.js"></script>

@@ -28,7 +28,7 @@ socket.on('messageLogs' , msgArray => {
     let logs = document.getElementById('message_logs')
     let messages = ''
     msgArray.forEach(message => {
-        messages += `El usuario <b>${message.user}</b> dice: ${message.message} <br/><br/>` 
+        messages += `<b>${message.user}</b>: ${message.message} <br/><br/>` 
     })
     logs.innerHTML = messages
 })
