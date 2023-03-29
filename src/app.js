@@ -7,6 +7,7 @@ const { userRouter } = require('./routes/userRouter');
 const { cartRouter } = require('./routes/cartRouter');
 const { Server } =  require('socket.io');
 const { viewSocket } = require('./routes/routerViews/viewSocket');
+const { realTimeProducts } = require('./routes/routerViews/viewRealProducts');
 
 const app = express();
 const port = process.env.PORT || 8080;
@@ -29,7 +30,10 @@ app.use(( err , req , res , next ) => {
 })
 
 // Views de products 
-app.use('/api/products' , productRouter)
+app.use('/home' , productRouter)
+
+// Socket products
+app.use('/realtimeproducts' , realTimeProducts)
 
 // Views de usuario 1
 app.use('/api/users' , userRouter)
@@ -49,22 +53,24 @@ const httpServer = app.listen(port, (err) => {
 })
 
 // Socket SV
-const io = new Server(httpServer)
+const ioChat = new Server(httpServer)
+
 const messages = []
 
-io.on('connection' , socket => {
+ioChat.on('connection' , socket => {
     console.log("Usuario conectado");
 
     socket.on('message' , data => {
         messages.push(data)
         
-        io.emit('messageLogs' , messages)
+        ioChat.emit('messageLogs' , messages)
     })
 
     socket.on('userAuthenticated', data => {
         socket.broadcast.emit('newUser' , data)
     })
 })
+
 
 
 

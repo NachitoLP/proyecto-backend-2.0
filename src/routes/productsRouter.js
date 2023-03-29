@@ -1,5 +1,4 @@
 const { Router } = require('express')
-const { uploaders } = require('../utils/multer');
 const { ProductManager } = require("../managers/productManager");
 
 
@@ -10,12 +9,13 @@ const productManager = new ProductManager();
 productRouter.get('/', async ( req , res ) => {
     const {limit} = req.query;
     let products = await productManager.getProducts()
+    let productsArray = products.map((product) => product)
     
     if (!limit) {
-        return res.send(products)
+        return res.render('products_no_limit' , {productsArray})
     }
-
-    res.send(products.slice(0,limit))
+    let productsArrayLimit = products.slice(0,limit)
+    res.render('products_limit' , {productsArrayLimit})
 })
 
 productRouter.get('/:productID', async ( req , res ) => {
@@ -24,32 +24,6 @@ productRouter.get('/:productID', async ( req , res ) => {
 
     res.send(productFound)
 })
-
-productRouter.post('/', uploaders.single('file'), async ( req , res ) => {
-    const { name , description , price , href , code , stock, status = true } = req.body
-    if (!name || !description || !price || !code || !stock) return res.send("No se completaron todos los datos del producto.")
-
-    let newProduct = {name , description , price , href , code , stock , status}
-
-    let newArray = await productManager.addProduct(newProduct)
-
-    return res.send(newArray)
-})
-
-/* productRouter.put('/:prodID', async ( req , res ) => {
-    const { prodID } = req.params
-    let products = await productManager.getProducts()
-    const { price } = req.body
-
-    let productIndex = products.findIndex((product) => product.id.toString() === prodID)
-    products[productIndex].price = price
-
-
-    res.status(200).send({
-        status:"success",
-        products
-    })
-}) */
 
 productRouter.delete('/:productID', async ( req , res ) => {
     const { productID } = req.params

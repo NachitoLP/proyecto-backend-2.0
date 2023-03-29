@@ -1,0 +1,40 @@
+<div>
+    <h3 class="new_product_title">Ingrese los datos del producto a agregar</h3>
+    <form action="/realtimeproducts" method="POST" enctype="multipart/form-data" class="form_new_product">
+        <label>Nombre</label>
+        <input name="name" required>
+        <label>Descripción</label>
+        <input name="description" required>
+        <label>Precio (Solo el número)</label>
+        <input name="price" type="number" required>
+        <label>Link de la imagen (opcional)</label>
+        <input name="href" type="text">
+        <label>Inserte la imagen</label>
+        <input name="file" type="file">
+        <label>Código</label>
+        <input name="code" required>
+        <label>Stock disponible</label>
+        <input name="stock" type="number" required>
+        <input type="submit" id="new_product_submit">
+    </form>
+</div>
+<div class="div_padre_products">
+    {{#each productsArray}}
+        <div class="div_product">
+            <div>
+                <br>
+                <h3>{{this.name}}</h3>
+                <p><b>Description:</b> {{this.description}}</p>
+                <p><b>Price:</b> {{this.price}}</p>
+                <p><b>Code:</b> {{this.code}}</p>
+                <p><b>Stock:</b> {{this.stock}}</p>
+                <p><b>Id:</b> {{this.id}}</p>
+            </div>
+        </div>
+    {{/each}}
+</div>
+
+{{!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.1/dist/sweetalert2.all.min.js"></script> --}}
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/index.js"></script>
+
