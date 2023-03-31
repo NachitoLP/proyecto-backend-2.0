@@ -1,5 +1,8 @@
 const socket = io()
-let user
+
+// CHAT
+
+/* let user
 Swal.fire({
     title: 'Registrarse',
     input: "text",
@@ -41,4 +44,50 @@ socket.on('newUser' , data => {
         toast: true,
         position: "top-right" 
     })
+})
+ */
+
+// POST REALTIME
+
+let formSubmit = document.getElementById('new_product_submit')
+let inputName = document.getElementById('name')
+let inputDes = document.getElementById('description')
+let inputPrice = document.getElementById('price')
+let inputCode = document.getElementById('code')
+let inputStock = document.getElementById('stock')
+
+formSubmit.addEventListener('click' , evt => {
+    evt.preventDefault()
+
+    socket.emit('newProduct' , {
+        name: inputName.value,
+        description: inputDes.value,
+        price: inputPrice.value,
+        code: inputCode.value,
+        stock: inputStock.value
+    })
+    inputName.value = ''
+    inputDes.value = ''
+    inputPrice.value = ''
+    inputCode.value = ''
+    inputStock.value = ''
+})
+
+socket.on('newArrayProducts' , data => {
+    let divPadre = document.getElementById('div_products_added')
+    let products = data.map(product=> `
+    <div class="div_product">
+        <div>
+            <br>
+            <h3>${product.name}</h3>
+            <p><b>Description:</b> ${product.description}</p>
+            <p><b>Price:</b> ${product.price}</p>
+            <p><b>Code:</b> ${product.code}</p>
+            <p><b>Stock:</b> ${product.stock}</p>
+            <p><b>Id:</b> ${product.id}</p>
+        </div>
+    </div>
+    `)
+
+    divPadre.innerHTML = products
 })

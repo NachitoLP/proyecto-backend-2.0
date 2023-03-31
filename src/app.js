@@ -8,6 +8,7 @@ const { cartRouter } = require('./routes/cartRouter');
 const { Server } =  require('socket.io');
 const { viewSocket } = require('./routes/routerViews/viewSocket');
 const { realTimeProducts } = require('./routes/routerViews/viewRealProducts');
+const { ProductManager } = require('./managers/productManager');
 
 const app = express();
 const port = process.env.PORT || 8080;
@@ -52,9 +53,9 @@ const httpServer = app.listen(port, (err) => {
     console.log(`Servidor escuchando en el puerto ${port}`);
 })
 
-// Socket SV
-const ioChat = new Server(httpServer)
+// Socket Chat
 
+/* const ioChat = new Server(httpServer)
 const messages = []
 
 ioChat.on('connection' , socket => {
@@ -69,6 +70,25 @@ ioChat.on('connection' , socket => {
     socket.on('userAuthenticated', data => {
         socket.broadcast.emit('newUser' , data)
     })
+})
+ */
+
+// RealTime
+
+let productManager = new ProductManager()
+
+const ioReal = new Server(httpServer)
+
+ioReal.on('connection' , socket => {
+    console.log("Usuario conectado")
+
+    socket.on('newProduct' , async data => {
+        const newProduct = data
+        let newArray = await productManager.addProduct(newProduct)
+
+        ioReal.emit('newArrayProducts' , newArray)
+    })
+
 })
 
 
