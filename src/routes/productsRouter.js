@@ -22,7 +22,7 @@ productRouter.get('/:productID', async ( req , res ) => {
     const { productID } = req.params
     let productFound = await productManager.getProductsById(productID)
 
-    res.send(productFound)
+    res.render('product_id' , {productFound})
 })
 
 productRouter.delete('/:productID', async ( req , res ) => {
