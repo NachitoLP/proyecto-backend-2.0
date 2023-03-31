@@ -58,19 +58,24 @@ let inputStock = document.getElementById('stock')
 
 formSubmit.addEventListener('click' , evt => {
     evt.preventDefault()
-
-    socket.emit('newProduct' , {
-        name: inputName.value,
-        description: inputDes.value,
-        price: inputPrice.value,
-        code: inputCode.value,
-        stock: inputStock.value
-    })
-    inputName.value = ''
-    inputDes.value = ''
-    inputPrice.value = ''
-    inputCode.value = ''
-    inputStock.value = ''
+    if(!inputName.value || !inputDes.value || !inputPrice.value || !inputCode.value || !inputStock.value) {
+        return alert("No se completaron todos los datos requeridos.")
+    }
+    else {
+        socket.emit('newProduct' , {
+            name: inputName.value,
+            description: inputDes.value,
+            price: inputPrice.value,
+            code: inputCode.value,
+            stock: inputStock.value
+        })
+        inputName.value = ''
+        inputDes.value = ''
+        inputPrice.value = ''
+        inputCode.value = ''
+        inputStock.value = ''
+    }
+    
 })
 
 socket.on('newArrayProducts' , data => {

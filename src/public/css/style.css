@@ -8,7 +8,7 @@
 
 *::selection {
   color: #ff004c;
-  background-color: rgba(0, 0, 0, 0); }
+  background-color: black; }
 
 .div_btn_home {
   display: flex;
@@ -128,3 +128,24 @@
     .div_padre_products .div_product p {
       margin: 0px 10px 10px;
       color: #0b2e4b; }
+
+.div_detail_container {
+  display: flex;
+  width: 500px;
+  min-height: 420px;
+  justify-content: space-around;
+  margin: 40px auto 228px;
+  background-color: white;
+  border-radius: 7px;
+  box-shadow: 2px 2px 4px 2px rgba(0, 0, 0, 0.6); }
+  .div_detail_container .div_detail h3 {
+    color: black;
+    font-size: 35px;
+    margin: 20px 0px;
+    text-align: center; }
+  .div_detail_container .div_detail p {
+    font-size: 40px;
+    display: inline-block;
+    margin: 40px;
+    text-align: center;
+    display: block; }
