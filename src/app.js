@@ -25,10 +25,6 @@ app.use(express.static( __dirname + '/public' ))
 
 // Middle y manejo de errores
 app.use(cookieParser())
-app.use(( err , req , res , next ) => {
-    console.log(err);
-    res.status(500).send('Hubo un error en la ruta.')
-})
 
 // Views de products 
 app.use('/home' , productRouter)
@@ -47,6 +43,11 @@ app.use('/views/socket' , viewSocket)
 
 // Views de Cart
 app.use('/api/carts' , cartRouter)
+
+app.use(( err , req , res , next ) => {
+    console.log(err);
+    res.status(500).send('Hubo un error en la ruta.')
+})
 
 const httpServer = app.listen(port, (err) => {
     if(err) return console.log("El servidor falló, vuelva a intentar nuevamente.");

@@ -44,7 +44,7 @@ class ProductManager {
         console.log("producto no encontrado");
     }
 
-    deleteProductsById = async ( id ) => {
+    deleteProductById = async ( id ) => {
         const products = await this.getProducts();
 
         let productFound = products.find(product => product.id.toString() === id)

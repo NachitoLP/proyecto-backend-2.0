@@ -32,7 +32,7 @@ productRouter.delete('/:productID', async ( req , res ) => {
         return res.status(400).send("Envie el ID del producto a eliminar.")
     }
     
-    let deleteProduct = await productManager.deleteProductsById(productID)
+    let deleteProduct = await productManager.deleteProductById(productID)
     
     return res.send(deleteProduct)
 })

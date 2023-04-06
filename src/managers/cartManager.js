@@ -45,7 +45,7 @@ class CartManager {
         return(cartFound)
     }
 
-    addProductInCart = async ( cartID , prodID ) => {
+    addProductToCart = async ( cartID , prodID ) => {
         try {
             let carts = await this.readCartFile()
             const indexCart = carts.findIndex(cart => cart.id.toString() === cartID)
