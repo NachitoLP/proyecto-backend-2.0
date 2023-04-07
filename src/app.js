@@ -1,11 +1,13 @@
 const express = require('express');
-const { productRouter } = require('./routes/productsRouter');
 const cookieParser = require('cookie-parser');
+const path = require('path');
+const { Server } =  require('socket.io');
+
+const { productRouter } = require('./routes/productsRouter');
 const handlebars = require('express-handlebars');
 const { viewsUser } = require('./routes/routerViews/viewUser');
 const { userRouter } = require('./routes/userRouter');
 const { cartRouter } = require('./routes/cartRouter');
-const { Server } =  require('socket.io');
 const { viewSocket } = require('./routes/routerViews/viewSocket');
 const { realTimeProducts } = require('./routes/routerViews/viewRealProducts');
 const { ProductManager } = require('./managers/productManager');
@@ -21,7 +23,7 @@ app.set('view engine', 'handlebars')
 // JSON
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-app.use(express.static( __dirname + '/public' ))
+app.use(express.static( path.resolve(__dirname, '../public') ))
 
 // Middle y manejo de errores
 app.use(cookieParser())
