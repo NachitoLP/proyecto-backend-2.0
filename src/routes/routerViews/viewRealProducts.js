@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { ProductManager } = require('../../managers/productManager');
+const { ProductManager } = require('../../managers/fs/productManager');
 
 const realTimeProducts = Router();
 let productManager = new ProductManager()

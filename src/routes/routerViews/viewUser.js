@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { usersArray } = require('../userRouter');
+const { usersArray } = require('../routers/userRouter');
 const viewsUser = Router();
 
 

@@ -12,13 +12,14 @@
 
 .div_btn_home {
   display: flex;
-  width: 1600px;
+  width: 100%;
   margin: 50px auto 0px;
+  justify-content: center;
   height: 100%; }
   .div_btn_home a {
     margin: 0px 50px; }
     .div_btn_home a .btn_home {
-      width: 700px;
+      width: 600px;
       text-align: center;
       height: 900px;
       background-color: black;
