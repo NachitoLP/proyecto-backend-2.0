@@ -2,7 +2,7 @@ const socket = io()
 
 // CHAT
 
-/* let user
+let user
 Swal.fire({
     title: 'Registrarse',
     input: "text",
@@ -45,11 +45,11 @@ socket.on('newUser' , data => {
         position: "top-right" 
     })
 })
- */
+
 
 // POST REALTIME
 
-let formSubmit = document.getElementById('new_product_submit')
+/* let formSubmit = document.getElementById('new_product_submit')
 let inputName = document.getElementById('name')
 let inputDes = document.getElementById('description')
 let inputPrice = document.getElementById('price')
@@ -95,4 +95,4 @@ socket.on('newArrayProducts' , data => {
     `)
 
     divPadre.innerHTML = products
-})
+}) */

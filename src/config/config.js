@@ -1,5 +1,5 @@
 const { connect } = require('mongoose')
-let url = 'mongodb+srv://Joaquin:joaquin030203@proyectdb.eauw9yn.mongodb.net/?retryWrites=true&w=majority'
+let url = 'mongodb+srv://Joaquin:joaquin030203@proyectdb.eauw9yn.mongodb.net/ecommerce?retryWrites=true&w=majority'
 
 const objConfig = {
     connectDB: async () => {

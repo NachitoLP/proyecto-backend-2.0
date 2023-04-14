@@ -7,7 +7,8 @@ const {allowInsecurePrototypeAccess} = require('@handlebars/allow-prototype-acce
 
 const { objConfig } = require('./config/config');
 const { routerApp } = require('./routes');
-const { ProductManager } = require('./managers/fs/productManager');
+const { ProductManagerMongo } = require('./dao/productManagerMongo');
+const { MsgModelMongo } = require('./dao/chatManager');
 
 objConfig.connectDB()
 
@@ -34,7 +35,8 @@ const httpServer = app.listen(port, (err) => {
 
 // Socket Chat
 
-/* const ioChat = new Server(httpServer)
+let msgModel = new MsgModelMongo()
+const ioChat = new Server(httpServer)
 const messages = []
 
 ioChat.on('connection' , socket => {
@@ -42,7 +44,7 @@ ioChat.on('connection' , socket => {
 
     socket.on('message' , data => {
         messages.push(data)
-        
+        msgModel.createMessage(data.user, data.message)
         ioChat.emit('messageLogs' , messages)
     })
 
@@ -50,11 +52,11 @@ ioChat.on('connection' , socket => {
         socket.broadcast.emit('newUser' , data)
     })
 })
- */
+
 
 // RealTime
 
-let productManager = new ProductManager()
+/* let productManager = new ProductManagerMongo()
 
 const ioReal = new Server(httpServer)
 
@@ -69,7 +71,7 @@ ioReal.on('connection' , socket => {
         ioReal.emit('newArrayProducts' , newArray)
     })
 
-})
+}) */
 
 
 
