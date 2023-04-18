@@ -1,7 +1,6 @@
 const cookieParser = require('cookie-parser')
 const {Router} = require('express')
 
-const { viewsUser } = require('./routerViews/viewUser');
 const { userRouter } = require('./routers/userRouter');
 const { cartRouter } = require('./routers/cartRouter');
 const { viewSocket } = require('./routerViews/viewSocket');
@@ -21,9 +20,6 @@ routerApp.use('/realtimeproducts' , realTimeProducts)
 
 // Views de usuario 1
 routerApp.use('/api/users' , userRouter)
-
-// Views de usuario 2
-routerApp.use('/views/user' , viewsUser)
 
 // Views de socket
 routerApp.use('/views/socket' , viewSocket)

@@ -1,37 +1,36 @@
 const { Router } = require('express');
+const { UserManagerMongo } = require('../../dao/userManagerMongo');
 const userRouter = Router();
-
-const usersArray = [
-    { id: 1, name: "Joaquin", surname: "Lopez", gender: "M" , email: "joaquin@gmail.com" ,  role: "admin" },
-    { id: 2, name: "Carlos", surname: "Gomez", gender: "M" , email: "carlos@gmail.com" , role: "user" },
-    { id: 3, name: "Fernanda", surname: "Perez", gender: "F" , email: "fernanda@gmail.com" , role: "user" },
-    { id: 4, name: "Carla", surname: "Diaz", gender: "F" , email: "carla@gmail.com" , role: "user" },
-    { id: 5, name: "Marcelo", surname: "Lopez", gender: "M" , email: "marcelo@gmail.com" , role: "admin" }
-]
+let userManager = new UserManagerMongo()
 
 
-userRouter.get('/', ( req , res ) => {
+userRouter.get('/', async ( req , res ) => {
     const {limit} = req.query;
-    
+    let users = await userManager.getUsers()
     if (!limit) {
-        return res.send(usersArray)
+        return res.status(201).send(users)
     }
-    const usersNewArray = usersArray
-    res.send(usersNewArray.slice(0,limit))
+    const usersNewArray = users
+    res.status(201).send(usersNewArray.slice(0,limit))
 })
 
-userRouter.post('/' , ( req , res ) => {
-    const { name , surname , gender , email } = req.body
-    let id = 0
+userRouter.get('/:name', async ( req , res ) => {
+    const {name} = req.params
+    let userFound = await userManager.getUserByName(name)
 
-    if (usersArray.length === 0) {
-        id = 1;
-    }
-    else {
-        id = usersArray[usersArray.length-1].id + 1;
+    if(userFound.length === 0) {
+        return res.status(404).send("User not found.")
     }
 
-    usersArray.push( { id , name , surname , gender , email , role: "user" } )
+    return res.status(201).send(userFound)
+})
+
+userRouter.post('/' , async ( req , res ) => {
+    const { first_name , last_name , gender , email } = req.body
+
+    let newUser = { first_name , last_name , gender , email }
+    userManager.addUser( newUser )
+
     return res.json({
         message: 'Usuario creado.',
         usersArray
@@ -39,6 +38,5 @@ userRouter.post('/' , ( req , res ) => {
 })
 
 module.exports = {
-    userRouter,
-    usersArray
+    userRouter
 }
