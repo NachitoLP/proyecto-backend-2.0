@@ -6,8 +6,23 @@ const cartManager = new CartManagerMongo()
 
 
 cartRouter.get('/', async ( req , res ) => {
-    const newCart = await cartManager.getCarts()
-    res.status(200).send(newCart)
+    try {
+        const {limit} = req.query;
+        const newCart = await cartManager.getCarts()
+
+        if (!newCart) {
+            return res.status(400).send('No hay productos')
+        }
+        
+        if (!limit) {
+            return res.send(newCart)
+        }
+
+        let newCartLimit = newCart.slice(0,limit)
+        return res.status(200).send(newCartLimit)
+    } catch (error) {
+        console.log(error);
+    }
 })
 
 cartRouter.get('/:cartID', async ( req , res ) => {
@@ -33,6 +48,15 @@ cartRouter.delete('/:cartID' , async ( req , res ) => {
     res.status(200).send({
         cart: deleteCart,
         message: "Carrito borrado."
+    })
+})
+
+cartRouter.delete('/:cartID/products/:prodID' , async ( req , res ) => {
+    const { cartID , prodID } = req.params
+    const deleteCart = await cartManager.deleteProductInCart( cartID , prodID )
+    res.status(200).send({
+        cart: deleteCart,
+        message: "Producto borrado."
     })
 })
 
