@@ -1,8 +1,8 @@
 const { cartModel } = require("./models/cartsModel");
 
 class CartManagerMongo{
-    getCarts = async () => {
-        let cart = await cartModel.find()
+    getCarts = async (limit,page) => {
+        let cart = await cartModel.paginate({},{limit:limit||10, page:page, lean:true})
         if(cart.length == 0) {
             return console.log("No existe ningún carrito.");
         }
@@ -22,7 +22,7 @@ class CartManagerMongo{
     }
 
     addProductToCart = async ( cartID, prodID ) => {
-        let cart = await cartModel.findById({_id: cartID})
+        let cart = await cartModel.find({_id: cartID})
         let productFound = cart.products.findIndex(product => product._id == prodID)
 
         if (productFound === -1) {
@@ -46,7 +46,7 @@ class CartManagerMongo{
     }
 
     deleteProductInCart = async ( cartID , prodID ) => {
-        let cart = await cartModel.findById({_id: cartID})
+        let cart = await cartModel.find({_id: cartID})
         let productFound = cart.products.findIndex(product => product._id == prodID)
 
         if (productFound === -1) {

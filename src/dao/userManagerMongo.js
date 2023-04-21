@@ -2,12 +2,12 @@ const { userModel } = require("./models/usersModel")
 
 
 class UserManagerMongo{
-    getUsers = async () => {
-        return await userModel.find()
+    getUsers = async (limit,page) => {
+        return await userModel.paginate({},{limit:limit||12, page:page, lean:true})
     }
     
-    getUserByName = async ( name ) => {
-        return await userModel.find({first_name: name})
+    getUserByName = async ( name , limit , page ) => {
+        return await userModel.paginate({first_name: name},{limit:limit||12, page:page, lean:true})
     }
 
     addUser = async ( newUser ) => {

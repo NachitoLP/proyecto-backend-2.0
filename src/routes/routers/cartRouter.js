@@ -7,57 +7,84 @@ const cartManager = new CartManagerMongo()
 
 cartRouter.get('/', async ( req , res ) => {
     try {
-        const {limit} = req.query;
-        const newCart = await cartManager.getCarts()
+        const {limit,page} = req.query;
+        const {docs, hasPrevPage, hasNextPage, prevPage, nextPage} = await cartManager.getCarts(limit,page)
 
-        if (!newCart) {
+        if (!docs) {
             return res.status(400).send('No hay productos')
         }
         
-        if (!limit) {
-            return res.send(newCart)
-        }
-
-        let newCartLimit = newCart.slice(0,limit)
-        return res.status(200).send(newCartLimit)
-    } catch (error) {
+        return res.status(200).render('carts', {
+            newCart:docs, 
+            hasPrevPage, 
+            hasNextPage, 
+            prevPage, 
+            nextPage
+        })
+    } 
+    catch (error) {
         console.log(error);
     }
 })
 
 cartRouter.get('/:cartID', async ( req , res ) => {
-    const { cartID } = req.params
-    const newCart = await cartManager.getCartById(cartID)
-    res.status(200).send(newCart)
+    try {
+        const { cartID } = req.params
+        const newCart = await cartManager.getCartById(cartID)
+        return res.status(200).render('carts', {newCart})
+    } 
+    catch (error) {
+        console.log(error);
+    }
 })
 
 cartRouter.post('/', async ( req , res ) => {
-    const newCart = await cartManager.createCart({products: []})
-    res.status(200).send(newCart)
+    try {
+        const newCart = await cartManager.createCart({products: []})
+        res.status(200).send(newCart)
+    } 
+    catch (error) {
+        console.log(error);
+    }
 })
 
 cartRouter.post('/:cartID/products/:prodID' , async ( req , res ) => {
-    const { cartID , prodID } = req.params
-    const newProdInCart = await cartManager.addProductToCart( cartID , prodID )
-    res.status(200).send(newProdInCart)
+    try {
+        const { cartID , prodID } = req.params
+        const newProdInCart = await cartManager.addProductToCart( cartID , prodID )
+        res.status(200).send(newProdInCart)
+    } 
+    catch (error) {
+        console.log(error);
+    }
 })
 
 cartRouter.delete('/:cartID' , async ( req , res ) => {
-    const { cartID } = req.params
-    const deleteCart = await cartManager.deleteCart( cartID )
-    res.status(200).send({
-        cart: deleteCart,
-        message: "Carrito borrado."
-    })
+    try {
+        const { cartID } = req.params
+        const deleteCart = await cartManager.deleteCart( cartID )
+        res.status(200).send({
+            cart: deleteCart,
+            message: "Carrito borrado."
+        })
+    } 
+    catch (error) {
+        console.log(error);
+    }
 })
 
 cartRouter.delete('/:cartID/products/:prodID' , async ( req , res ) => {
-    const { cartID , prodID } = req.params
-    const deleteCart = await cartManager.deleteProductInCart( cartID , prodID )
-    res.status(200).send({
-        cart: deleteCart,
-        message: "Producto borrado."
-    })
+    try {
+        const { cartID , prodID } = req.params
+        const deleteCart = await cartManager.deleteProductInCart( cartID , prodID )
+        res.status(200).send({
+            cart: deleteCart,
+            message: "Producto borrado."
+        })
+    } 
+    catch (error) {
+        console.log(error);
+    }
 })
 
 module.exports = {

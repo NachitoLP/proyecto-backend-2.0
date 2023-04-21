@@ -6,9 +6,9 @@ let productManager = new ProductManagerMongo()
 
 realTimeProducts.get('/' , async ( req , res ) => {
     try {
-        let products = await productManager.getProducts()
-        let productsArray = products.map((product) => product)
-        res.render('realtime' , {productsArray})
+        let {docs} = await productManager.getProducts()
+
+        res.render('realtime' , {products:docs})
     } catch (error) {
         console.log(error);
     }
@@ -27,8 +27,7 @@ realTimeProducts.post('/' , async ( req , res ) => {
         console.log(result);
 
         let products = await productManager.getProducts()
-        let productsArray = products.map((product) => product)
-        return res.render('realtime' , {productsArray})
+        return res.render('realtime' , {products})
     } 
     catch (error) {
         console.log(error);

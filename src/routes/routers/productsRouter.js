@@ -8,22 +8,32 @@ const productManager = new ProductManagerMongo();
 
 productRouter.get('/', async ( req , res ) => {
     try {
-        const {limit} = req.query;
-        let products = await productManager.getProducts()
+        const {limit , page} = req.query;
+        let {docs , hasPrevPage, hasNextPage, prevPage, nextPage} = await productManager.getProducts(limit , page)
 
-        if (!products) {
+        if (!docs) {
             return res.status(400).send('No hay productos')
         }
         
-        let productsArray = products.map((product) => product)
-        if (!limit) {
-            return res.render('products_no_limit' , {productsArray})
-        }
-
-        let productsArrayLimit = products.slice(0,limit)
-        res.render('products_limit' , {productsArrayLimit})
+        return res.render('products' , {
+            products:docs, 
+            hasPrevPage, 
+            hasNextPage, 
+            prevPage, 
+            nextPage
+        })
     } 
     catch (error) {
+        console.log(error);
+    }
+})
+
+productRouter.get('/:prodID', async ( req , res) => {
+    try {
+        const {prodID} = req.params
+        let product = await productManager.getProductById(prodID)
+        return res.status(200).render('product_id' , {product})
+    } catch (error) {
         console.log(error);
     }
 })

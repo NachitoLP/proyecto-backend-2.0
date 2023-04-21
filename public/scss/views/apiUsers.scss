@@ -1,0 +1,18 @@
+.div_padre_users{
+    display: flex;
+    margin: auto;
+    width: 900px;
+    flex-wrap: wrap;
+    justify-content: center;
+    .div_users{
+        margin: 20px;
+        width: 200px;
+        height: 200px;
+        border: 3px solid black;
+        text-align: center;
+    
+        p{
+            margin: 20px 0px
+        }
+    }
+}

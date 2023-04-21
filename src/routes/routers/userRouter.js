@@ -5,36 +5,61 @@ let userManager = new UserManagerMongo()
 
 
 userRouter.get('/', async ( req , res ) => {
-    const {limit} = req.query;
-    let users = await userManager.getUsers()
-    if (!limit) {
-        return res.status(201).send(users)
+    try {
+        const {limit,page=1} = req.query;
+        let {docs , hasPrevPage, hasNextPage, prevPage, nextPage} = await userManager.getUsers(limit,page)
+
+        return res.status(201).render('users', {
+            users: docs, 
+            hasPrevPage, 
+            hasNextPage, 
+            prevPage, 
+            nextPage
+        })
+    } 
+    catch (error) {
+        error
     }
-    const usersNewArray = users
-    res.status(201).send(usersNewArray.slice(0,limit))
 })
 
 userRouter.get('/:name', async ( req , res ) => {
-    const {name} = req.params
-    let userFound = await userManager.getUserByName(name)
+    try {
+        const {name} = req.params
+        const {limit,page=1} = req.query;
+        let {docs , hasPrevPage, hasNextPage, prevPage, nextPage} = await userManager.getUserByName(name , limit , page)
 
-    if(userFound.length === 0) {
-        return res.status(404).send("User not found.")
+        if(docs.length === 0) {
+            return res.status(404).send("User not found.")
+        }
+
+        return res.status(201).render('users', {
+            users: docs, 
+            hasPrevPage, 
+            hasNextPage, 
+            prevPage, 
+            nextPage
+        })
+    } 
+    catch (error) {
+        console.log(error);
     }
-
-    return res.status(201).send(userFound)
 })
 
 userRouter.post('/' , async ( req , res ) => {
-    const { first_name , last_name , gender , email } = req.body
+    try {
+        const { first_name , last_name , gender , email } = req.body
 
-    let newUser = { first_name , last_name , gender , email }
-    userManager.addUser( newUser )
+        let newUser = { first_name , last_name , gender , email }
+        userManager.addUser( newUser )
 
-    return res.json({
-        message: 'Usuario creado.',
-        usersArray
-    })
+        return res.json({
+            message: 'Usuario creado.',
+            usersArray
+        })
+    } 
+    catch (error) {
+        console.log(error);
+    }
 })
 
 module.exports = {

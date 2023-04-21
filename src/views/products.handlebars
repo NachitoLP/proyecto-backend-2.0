@@ -1,0 +1,23 @@
+<div class="div_padre_products">
+    {{#each products}}
+        <div class="div_product">
+                <h3>{{this.name}}</h3>
+            <div>
+                <br>
+                <p>${{this.price}}</p>
+                <a href="/home/{{this._id}}">Detalle</a>
+                <a href="#">Añadir al carrito</a>
+            </div>
+        </div>
+    {{/each}}
+</div>
+<div class="div_botones_prev_next">
+    {{#if hasPrevPage}}
+        <a href="/home?page={{prevPage}}">⬅</a>
+    {{/if}}
+    {{#if hasNextPage}}
+        <a href="/home?page={{nextPage}}">➡</a>
+    {{/if}}
+</div>
+
+<script src="/js/index.js"></script>
