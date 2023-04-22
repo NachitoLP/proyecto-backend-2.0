@@ -1,10 +1,11 @@
 const { Router } = require('express');
 const { UserManagerMongo } = require('../../dao/userManagerMongo');
+const { authSession } = require('../../middleware/authMiddleware');
 const userRouter = Router();
 let userManager = new UserManagerMongo()
 
 
-userRouter.get('/', async ( req , res ) => {
+userRouter.get('/', authSession , async ( req , res ) => {
     try {
         const {limit,page=1} = req.query;
         let {docs , hasPrevPage, hasNextPage, prevPage, nextPage} = await userManager.getUsers(limit,page)

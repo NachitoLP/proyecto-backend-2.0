@@ -1,5 +1,10 @@
+// Reset
 @import "reset/reset.scss";
 
+// Utilidades
+@import "utilidades/variables";
+
+// Views
 @import "views/home.scss";
 
 @import "views/products.scss";
@@ -12,6 +17,13 @@
 
 @import "views/chat.scss";
 
+@import "views/carts.scss";
+
+@import "views/registerForm.scss";
+
+
+// Componentes
 @import "components/next&prev.scss";
 
-@import "views/carts.scss";
+@import "components/header.scss";
+

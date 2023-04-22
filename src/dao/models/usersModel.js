@@ -4,17 +4,29 @@ const paginate = require('mongoose-paginate-v2')
 const collection = 'users';
 
 const userSchema = new Schema({
-    first_name: {
+    username: {
         type: String,
-        index: true
+        unique: true,
+        required: true
+    },
+    first_name: {
+        type: String
     },
     last_name: {
         type: String
     },
     email: {
-        type: String
+        type: String,
+        unique: true,
+        required: true,
+        index: true
     },
-    gender: {
+    password: {
+        type: String,
+        unique: true,
+        required: true
+    },
+    rol: {
         type: String
     }
 });

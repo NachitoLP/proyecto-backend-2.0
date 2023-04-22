@@ -1,3 +1,48 @@
+<header class="header" id="arriba">
+    <nav class="header_nav">
+        <input type="checkbox" id="check">
+        <label for="check" class="btn_check"><i class="fa-solid fa-bars"></i></label>
+        <ul class="header_navbar_list">
+            <div class="navbar_div_icon_home">
+                <a href="/home">
+                    <div class="nav_login">
+                        <span class="material-symbols-outlined">home</span>
+                        <label>Home</label>
+                    </div>
+                </a>
+            </div>
+            <li><a href="/api/products"><i class="fa-solid fa-house list_icons"></i>Productos</a></li>
+            <li><a href="/api/realtimeproducts"><i class="fa-solid fa-book list_icons"></i>RealTime</a></li>
+            <li><a href="/views/socket"><i class="fa-solid fa-folder list_icons"></i>Chat</a></li>
+            <div class="navbar_div_icons">
+                <a href="/session/login">
+                    <div class="nav_login">
+                        <span class="material-symbols-outlined md-24">face</span>
+                        <label>Log In</label>
+                    </div>
+                </a>
+                <a href="/session/register">
+                    <div class="nav_login">
+                        <span class="material-symbols-outlined">person</span>
+                        <label>Register</label>
+                    </div>
+                </a>
+                <a href="/api/carts">
+                    <div class="nav_login">
+                        <span class="material-symbols-outlined">shopping_cart</span>
+                        <label>Carrito</label>
+                    </div>
+                </a>
+                <a href="/session/logout">
+                    <div class="nav_login">
+                        <span class="material-symbols-outlined">logout</span>
+                        <label>Log Out</label>
+                    </div>
+                </a>
+            </div>
+        </ul>
+    </nav>
+</header>
 <div class="div_padre_products">
     {{#each products}}
         <div class="div_product">
@@ -5,7 +50,7 @@
             <div>
                 <br>
                 <p>${{this.price}}</p>
-                <a href="/home/{{this._id}}">Detalle</a>
+                <a href="/api/products/{{this._id}}">Detalle</a>
                 <a href="#">Añadir al carrito</a>
             </div>
         </div>
@@ -13,10 +58,10 @@
 </div>
 <div class="div_botones_prev_next">
     {{#if hasPrevPage}}
-        <a href="/home?page={{prevPage}}">⬅</a>
+        <a href="/api/products?page={{prevPage}}">⬅</a>
     {{/if}}
     {{#if hasNextPage}}
-        <a href="/home?page={{nextPage}}">➡</a>
+        <a href="/api/products?page={{nextPage}}">➡</a>
     {{/if}}
 </div>
 
