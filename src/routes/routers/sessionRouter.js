@@ -29,7 +29,8 @@ sessionRouter.post('/register' , async ( req , res ) => {
         
         req.session.user = {
             username: newUser.username,
-            password: newUser.password
+            password: newUser.password,
+            rol: newUser.rol
         }
 
         let result = await userModel.create(newUser)
@@ -54,7 +55,8 @@ sessionRouter.post('/login' , async ( req , res ) => {
 
         req.session.user = {
             username: user.username,
-            password: user.password
+            password: user.password,
+            rol: user.rol
         }
 
         res.redirect('/home')

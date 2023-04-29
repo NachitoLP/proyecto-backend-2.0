@@ -9,8 +9,10 @@ userRouter.get('/', authSession , async ( req , res ) => {
     try {
         const {limit,page=1} = req.query;
         let {docs , hasPrevPage, hasNextPage, prevPage, nextPage} = await userManager.getUsers(limit,page)
+        let userRol = (req.session.user.rol === "admin")
 
         return res.status(201).render('users', {
+            rol:userRol,
             users: docs, 
             hasPrevPage, 
             hasNextPage, 

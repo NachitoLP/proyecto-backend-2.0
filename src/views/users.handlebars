@@ -15,18 +15,6 @@
             <li><a href="/api/realtimeproducts"><i class="fa-solid fa-book list_icons"></i>RealTime</a></li>
             <li><a href="/views/socket"><i class="fa-solid fa-folder list_icons"></i>Chat</a></li>
             <div class="navbar_div_icons">
-                <a href="/session/login">
-                    <div class="nav_login">
-                        <span class="material-symbols-outlined md-24">face</span>
-                        <label>Log In</label>
-                    </div>
-                </a>
-                <a href="/session/register">
-                    <div class="nav_login">
-                        <span class="material-symbols-outlined">person</span>
-                        <label>Register</label>
-                    </div>
-                </a>
                 <a href="/api/carts">
                     <div class="nav_login">
                         <span class="material-symbols-outlined">shopping_cart</span>
@@ -43,21 +31,29 @@
         </ul>
     </nav>
 </header>
-<div class="div_padre_users">
-    {{#each users}}
-        <div class="div_users">
-            <p><strong>Nombre: {{this.first_name}}</strong></p>
-            <p><b>Apellido:</b> {{this.last_name}}</p>
-            <p><b>Email:</b> {{this.email}}</p>
-            <p><b>Género:</b> {{this.gender}}</p>
-        </div>
-    {{/each}}
-</div>
-<div class="div_botones_prev_next">
-    {{#if hasPrevPage}}
-        <a href="/api/users?page={{prevPage}}">⬅</a>
-    {{/if}}
-    {{#if hasNextPage}}
-        <a href="/api/users?page={{nextPage}}">➡</a>
-    {{/if}}
-</div>
+{{#if rol}}
+    <div class="div_padre_users">
+        {{#each users}}
+            <div class="div_users">
+                <p><strong>Nombre: {{this.first_name}}</strong></p>
+                <p><b>Apellido:</b> {{this.last_name}}</p>
+                <p><b>Email:</b> {{this.email}}</p>
+                <p><b>Género:</b> {{this.gender}}</p>
+            </div>
+        {{/each}}
+    </div>
+    <div class="div_botones_prev_next">
+        {{#if hasPrevPage}}
+            <a href="/api/users?page={{prevPage}}">⬅</a>
+        {{/if}}
+        {{#if hasNextPage}}
+            <a href="/api/users?page={{nextPage}}">➡</a>
+        {{/if}}
+    </div>
+    {{else}}
+        <center>
+            <div>
+                <h2>No tenés permisos para ver los usuarios.</h2>
+            </div>
+        </center>
+{{/if}}
