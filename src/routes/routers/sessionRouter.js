@@ -12,7 +12,6 @@ sessionRouter.post('/register' , async ( req , res ) => {
         const {first_name,last_name,email,password,username} = req.body
 
         const exist = await userModel.findOne({email})
-        const passwordExists = await userModel.findOne({password})
         
         if(exist) return res.send({status: 'error', message: 'El usuario ya existe.'})
 
@@ -28,8 +27,13 @@ sessionRouter.post('/register' , async ( req , res ) => {
             newUser.rol = 'admin'
         }
         
+        req.session.user = {
+            username: newUser.username,
+            password: newUser.password
+        }
+
         let result = await userModel.create(newUser)
-        res.redirect('/session/login')
+        res.redirect('/home')
     } 
     catch (error) {
         console.log(error);

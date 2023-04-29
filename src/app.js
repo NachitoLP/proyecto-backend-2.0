@@ -6,7 +6,7 @@ const Handlebars = require('handlebars')
 const {allowInsecurePrototypeAccess} = require('@handlebars/allow-prototype-access')
 
 const { objConfig } = require('./config/config');
-const { routerApp } = require('./routes');
+const { routerApp, mid1 } = require('./routes');
 const { ProductManagerMongo } = require('./dao/productManagerMongo');
 const { MsgModelMongo } = require('./dao/chatManager');
 
@@ -23,10 +23,16 @@ app.set('view engine', 'handlebars')
 // JSON
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+
+app.use(routerApp)
+
+app.get('/' , mid1 , async ( req , res ) => {
+    res.redirect('/home')
+})
+
 app.use(express.static( path.resolve(__dirname, '../public') ))
 
 // Routes
-app.use(routerApp)
 
 const httpServer = app.listen(port, (err) => {
     if(err) return console.log("El servidor falló, vuelva a intentar nuevamente.");

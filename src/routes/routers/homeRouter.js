@@ -1,7 +1,7 @@
-const { Router } = require('express')
+const { Router } = require('express');
 const homeRouter = Router();
 
-homeRouter.get('/' , ( req , res) => {
+homeRouter.get('/' , async ( req , res) => {
     res.render('home')
 })
 

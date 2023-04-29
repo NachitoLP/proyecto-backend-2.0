@@ -26,35 +26,46 @@ routerApp.use(session({
             useNewUrlParser: true,
             useUnifiedTopology: true
         },
-        ttl: 100000*24,
+        ttl: 100,
     }),
     secret: 'secretCoder',
     resave: true,
     saveUninitialized: true
 }))
 
-// Cookies Route
-routerApp.use('/api/cookie' , cookieRouter)
+let mid1 = async function (req , res , next)  {
+    try {
+        if (!req.session.user) {
+            return res.redirect('/session/login')
+        }
+    } catch (error) {
+        console.log(error);
+    }
+    next()
+}
 
-routerApp.use('/session' , sessionRouter)
+// Cookies Route
+routerApp.use('/api/cookie' , mid1 , cookieRouter)
+
+routerApp.use('/session', sessionRouter)
 
 // Views de home
-routerApp.use('/home' , homeRouter)
+routerApp.use('/home' , mid1 , homeRouter)
 
 // Views de products 
-routerApp.use('/api/products' , productRouter)
+routerApp.use('/api/products' , mid1 , productRouter)
 
 // Socket products
-routerApp.use('/api/realtimeproducts' , realTimeProducts)
+routerApp.use('/api/realtimeproducts' , mid1 , realTimeProducts)
 
 // Views de usuario 1
-routerApp.use('/api/users' , userRouter)
+routerApp.use('/api/users' , mid1 , userRouter)
 
 // Views de socket
-routerApp.use('/views/socket' , viewSocket)
+routerApp.use('/views/socket' , mid1 , viewSocket)
 
 // Views de Cart
-routerApp.use('/api/carts' , cartRouter)
+routerApp.use('/api/carts' , mid1 , cartRouter)
 
 routerApp.use(( err , req , res , next ) => {
     console.log(err);
@@ -62,5 +73,6 @@ routerApp.use(( err , req , res , next ) => {
 })
 
 module.exports = {
-    routerApp
+    routerApp,
+    mid1
 }
