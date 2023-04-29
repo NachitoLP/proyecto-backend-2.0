@@ -12,8 +12,10 @@ sessionRouter.post('/register' , async ( req , res ) => {
         const {first_name,last_name,email,password,username} = req.body
 
         const exist = await userModel.findOne({email})
-
+        const passwordExists = await userModel.findOne({password})
+        
         if(exist) return res.send({status: 'error', message: 'El usuario ya existe.'})
+
         const newUser = {
             first_name,
             username,
