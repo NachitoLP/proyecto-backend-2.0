@@ -33,15 +33,15 @@ routerApp.use(session({
     saveUninitialized: true
 }))
 
-let mid1 = async function (req , res , next)  {
+let mid1 = function (req , res , next)  {
     try {
         if (!req.session.user) {
             return res.redirect('/session/login')
         }
+        next()
     } catch (error) {
         console.log(error);
     }
-    next()
 }
 
 // Cookies Route
