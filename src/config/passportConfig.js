@@ -81,8 +81,8 @@ const initializePassport = () => {
                     const hashedPassword = createHashedPass(password)
 
                     const newUser = {
-                        first_name: profile._json.name,
-                        last_name: profile._json.name,
+                        first_name: profile._json.name.split(' ')[0],
+                        last_name: profile._json.name.split(' ')[1],
                         username: profile.username,
                         email: profile.emails[0].value,
                         password: hashedPassword,
