@@ -1,5 +1,7 @@
 const {Router} = require('express')
 const { userModel } = require('../../dao/models/usersModel')
+const { createHashedPass , checkValidPassword } = require('../../utils/bcryptPass')
+const passport = require('passport')
 
 const sessionRouter = Router()
 
@@ -7,56 +9,28 @@ sessionRouter.get('/register' , ( req , res ) => {
     res.render('register')
 })
 
-sessionRouter.post('/register' , async ( req , res ) => {
-    try {
-        const {first_name,last_name,email,password,username} = req.body
+sessionRouter.post('/register' , passport.authenticate('register', {failureRedirect:'/session/failedregister'}) , async ( req , res ) => {
+    res.redirect('/home')
+})
 
-        const exist = await userModel.findOne({email})
-        
-        if(exist) return res.send({status: 'error', message: 'El usuario ya existe.'})
-
-        const newUser = {
-            first_name,
-            username,
-            last_name,
-            email,
-            password,
-            rol:'usuario'
-        }
-        if (email === 'adminCoder@coder.com' && password == 'adminCod3r123') {
-            newUser.rol = 'admin'
-        }
-        
-        req.session.user = {
-            username: newUser.username,
-            password: newUser.password,
-            rol: newUser.rol
-        }
-
-        let result = await userModel.create(newUser)
-        res.redirect('/home')
-    } 
-    catch (error) {
-        console.log(error);
+sessionRouter.get('/failedregister' , ( req , res ) => {
+    let result = {
+        status: "Error.",
+        message: "El usuario ya existe."
     }
+    res.status(401).send(result)
 })
 
 sessionRouter.get('/login' , ( req , res ) => {
     res.render('login')
 })
 
-sessionRouter.post('/login' , async ( req , res ) => {
+sessionRouter.post('/login' , passport.authenticate('login', {failureRedirect:'/session/failedlogin'}), async ( req , res ) => {
     try {
-        const { username , password } = req.body
-
-        const user = await userModel.findOne({username,password})
-        
-        if (!user) return res.send({status: 'error', message: 'Revisá el usuario y la contraseña'})
-
         req.session.user = {
-            username: user.username,
-            password: user.password,
-            rol: user.rol
+            username: req.user.username,
+            email: req.user.email,
+            rol: req.user.rol
         }
 
         res.redirect('/home')
@@ -65,6 +39,51 @@ sessionRouter.post('/login' , async ( req , res ) => {
     }
 })
 
+sessionRouter.get('/failedlogin' , ( req , res ) => {
+    let result = {
+        status: "Error.",
+        message: "El usuario no existe."
+    }
+    res.status(401).send(result)
+})
+
+sessionRouter.get('/github' , passport.authenticate('github'))
+
+sessionRouter.get('/githubcallback' , passport.authenticate('github', {failureRedirect:'/session/failedlogin'}) , async ( req , res ) => {
+    try {
+        req.session.user = {
+            username: req.user.username,
+            email: req.user.email,
+            rol: req.user.rol
+        }
+
+        res.redirect('/home')
+    } catch (error) {
+        console.log(error);
+    }
+})
+
+sessionRouter.get('/recovery-password' , ( req , res ) => {
+    res.render('new_login')
+})
+
+sessionRouter.post('/recovery-password' , async ( req , res ) => {
+    const {email , newPassword} = req.body
+
+    const user = await userModel.findOne({email})
+    if (!user) return res.send({status: 'error', message: 'No hay ninguna cuenta registrada con ese correo.'})
+
+    const hashedPassword = createHashedPass(newPassword)
+
+    let result = await userModel.updateOne({email},{password:hashedPassword})
+
+    req.session.user = {
+        username: user.username,
+        email: user.email,
+        rol: user.rol
+    }
+    res.redirect('/home')
+})
 
 sessionRouter.get('/logout', ( req , res ) => {
     req.session.destroy (err => {

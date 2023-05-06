@@ -12,6 +12,8 @@ const { cookieRouter } = require('./routers/cookiesRouter');
 const { sessionRouter } = require('./routers/sessionRouter');
 const { objConfig } = require('../config/config');
 const { homeRouter } = require('./routers/homeRouter');
+const { initializePassport } = require('../config/passportConfig');
+const passport = require('passport');
 
 const routerApp = Router()
 
@@ -43,6 +45,10 @@ let mid1 = function (req , res , next)  {
         console.log(error);
     }
 }
+initializePassport()
+routerApp.use(passport.initialize())
+routerApp.use(passport.session())
+
 
 // Cookies Route
 routerApp.use('/api/cookie' , mid1 , cookieRouter)
