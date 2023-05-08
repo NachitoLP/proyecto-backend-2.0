@@ -14,13 +14,15 @@ productRouter.get('/', async ( req , res ) => {
         if (!docs) {
             return res.status(400).send('No hay productos')
         }
+        let user = req.session.user
         
         return res.render('products' , {
             products:docs, 
             hasPrevPage, 
             hasNextPage, 
             prevPage, 
-            nextPage
+            nextPage,
+            user
         })
     } 
     catch (error) {

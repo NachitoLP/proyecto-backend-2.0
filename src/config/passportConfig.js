@@ -17,7 +17,7 @@ const initializePassport = () => {
             try {
                 const { first_name , last_name , username } = req.body
         
-                const exist = await userModel.findOne({email}) || await userModel.findOne({username})
+                const exist = await userModel.findOne({$or: [{email}, {username}]})
                 
                 if(exist) return done(null , false)
         
@@ -97,7 +97,7 @@ const initializePassport = () => {
                 console.log(error);
             }
         })
-        )
+    )
 
     //Login
 

@@ -23,8 +23,7 @@ realTimeProducts.post('/' , async ( req , res ) => {
         }
 
         const newProduct = { name , description , price , stock , code , status: true }
-        let result = await productManager.addProduct(newProduct)
-        console.log(result);
+        await productManager.addProduct(newProduct)
 
         let products = await productManager.getProducts()
         return res.render('realtime' , {products})

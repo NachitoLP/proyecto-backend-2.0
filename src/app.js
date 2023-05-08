@@ -46,7 +46,7 @@ const ioChat = new Server(httpServer)
 const messages = []
 
 ioChat.on('connection' , socket => {
-    console.log("Usuario conectado");
+    /* console.log("Usuario conectado") */;
 
     socket.on('message' , data => {
         messages.push(data)

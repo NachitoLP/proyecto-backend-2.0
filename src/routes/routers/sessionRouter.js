@@ -1,6 +1,6 @@
 const {Router} = require('express')
 const { userModel } = require('../../dao/models/usersModel')
-const { createHashedPass , checkValidPassword } = require('../../utils/bcryptPass')
+const { createHashedPass } = require('../../utils/bcryptPass')
 const passport = require('passport')
 
 const sessionRouter = Router()

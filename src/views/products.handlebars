@@ -31,6 +31,14 @@
         </ul>
     </nav>
 </header>
+{{#if user}}
+    <div style="margin:auto;width:200px;text-align:center;">
+        <h4>Username:</h4>
+        <p>{{user.username}}</p>
+        <h4 style="margin-top: 10px;">Rol:</h4>
+        <p>{{user.rol}}</p>
+    </div>
+{{/if}}
 <div class="div_padre_products">
     {{#each products}}
         <div class="div_product">
