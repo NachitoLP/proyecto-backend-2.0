@@ -23,7 +23,7 @@ routerApp.use(cookieParser('L0p3s3Rcer¿T@'))
 // Session
 routerApp.use(session({
     store: create({
-        mongoUrl: objConfig.url,
+        mongoUrl: objConfig.mongoURL,
         mongoOptions: {
             useNewUrlParser: true,
             useUnifiedTopology: true

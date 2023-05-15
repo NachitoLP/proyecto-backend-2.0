@@ -85,6 +85,13 @@ sessionRouter.post('/recovery-password' , async ( req , res ) => {
     res.redirect('/home')
 })
 
+sessionRouter.get('/current' , async ( req , res ) => {
+    if (!req.session.user) {
+        res.redirect('/session/login')
+    }
+    res.send(req.session.user)
+})
+
 sessionRouter.get('/logout', ( req , res ) => {
     req.session.destroy (err => {
         if(err) return res.status(400).send({status: 'Logout error', message: err});

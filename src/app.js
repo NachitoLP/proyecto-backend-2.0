@@ -9,11 +9,11 @@ const { objConfig } = require('./config/config');
 const { routerApp, mid1 } = require('./routes');
 const { ProductManagerMongo } = require('./dao/productManagerMongo');
 const { MsgModelMongo } = require('./dao/chatManager');
-
 objConfig.connectDB()
 
 const app = express();
-const port = process.env.PORT || 8080;
+
+const portEnv = objConfig.port
 
 // Handlebars
 app.engine('handlebars', handlebars.engine({handlebars: allowInsecurePrototypeAccess(Handlebars)}))
@@ -34,9 +34,9 @@ app.use(express.static( path.resolve(__dirname, '../public') ))
 
 // Routes
 
-const httpServer = app.listen(port, (err) => {
+const httpServer = app.listen(portEnv, (err) => {
     if(err) return console.log("El servidor falló, vuelva a intentar nuevamente.");
-    console.log(`Servidor escuchando en el puerto ${port}`);
+    console.log(`Servidor escuchando en el puerto ${portEnv}`);
 })
 
 // Socket Chat
