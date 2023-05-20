@@ -1,5 +1,5 @@
 const { connect } = require('mongoose');
-let url = 'mongodb+srv://Joaquin:joaquin030203@proyectdb.eauw9yn.mongodb.net/ecommerce?retryWrites=true&w=majority'
+const MongoSingleton = require('../utils/mongoSingleton');
 require('dotenv').config()
 
 const objConfig = {
@@ -7,13 +7,8 @@ const objConfig = {
     mongoURL: process.env.MONGO_URL || 'mongodb+srv://Joaquin:joaquin030203@proyectdb.eauw9yn.mongodb.net/ecommerce?retryWrites=true&w=majority' ,
     adminName: process.env.ADMIN || '',
     adminPassword: process.env.PASSWORD || '',
-    connectDB: async () => {
-        try {
-            await connect(url)
-            console.log("Base de datos conectada");
-        } catch (error) {
-            console.log(error);
-        }
+    dbConnection: async() => {
+        MongoSingleton.getInstance()
     }
 }
 
