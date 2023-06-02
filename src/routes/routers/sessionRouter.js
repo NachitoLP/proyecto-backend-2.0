@@ -14,38 +14,38 @@ const {
 } = new sessionManagerController()
 
 
-sessionRouter.get('/register' , ( req , res ) => {
-    res.render('register')
-})
+sessionRouter
+    .get('/register' , ( req , res ) => {
+        res.render('register')
+    })
 
-sessionRouter.post('/register' , passport.authenticate('register', {failureRedirect:'/session/failedregister'}) , async ( req , res ) => {
-    res.redirect('/home')
-})
+    .post('/register' , passport.authenticate('register', {failureRedirect:'/session/failedregister'}) , async ( req , res ) => {
+        res.redirect('/home')
+    })
 
+    .get('/login' , ( req , res ) => {
+        res.render('login')
+    })
 
-sessionRouter.get('/login' , ( req , res ) => {
-    res.render('login')
-})
+    .post('/login' , passport.authenticate('login', {failureRedirect:'/session/failedlogin'}), loginFunction)
 
-sessionRouter.post('/login' , passport.authenticate('login', {failureRedirect:'/session/failedlogin'}), loginFunction)
+    .get('/failedregister' , failedRegister)
 
-sessionRouter.get('/failedregister' , failedRegister)
+    .get('/failedlogin' , failedLogin)
 
-sessionRouter.get('/failedlogin' , failedLogin)
+    .get('/github' , passport.authenticate('github'))
 
-sessionRouter.get('/github' , passport.authenticate('github'))
+    .get('/githubcallback' , passport.authenticate('github', {failureRedirect:'/session/failedlogin'}) , githubCallback)
 
-sessionRouter.get('/githubcallback' , passport.authenticate('github', {failureRedirect:'/session/failedlogin'}) , githubCallback)
+    .get('/recovery-password' , ( req , res ) => {
+        res.render('new_login')
+    })
 
-sessionRouter.get('/recovery-password' , ( req , res ) => {
-    res.render('new_login')
-})
+    .post('/recovery-password' , recoveryPassword)
 
-sessionRouter.post('/recovery-password' , recoveryPassword)
+    .get('/current' , currentSession)
 
-sessionRouter.get('/current' , currentSession)
-
-sessionRouter.get('/logout', logoutSession)
+    .get('/logout', logoutSession)
 
 
 module.exports = {

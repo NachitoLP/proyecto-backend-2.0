@@ -9,11 +9,12 @@ const {
     createUser
 } = new UserManagerController()
 
-userRouter.get('/', authSession , getUsers)
+userRouter
+    .get('/', authSession , getUsers)
 
-userRouter.get('/:name', getUserByName)
+    .get('/:first_name', getUserByName)
 
-userRouter.post('/' , createUser)
+    .post('/' , createUser)
 
 module.exports = {
     userRouter

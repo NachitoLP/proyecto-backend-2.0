@@ -1,6 +1,5 @@
-const { ProductManagerMongo } = require("../dao/productManagerMongo");
-const productManager = new ProductManagerMongo();
-
+const { ProductsDao } = require("../dao/factory");
+const productManager = new ProductsDao();
 
 class ProductManagerController {
     getProducts = async ( req , res ) => {

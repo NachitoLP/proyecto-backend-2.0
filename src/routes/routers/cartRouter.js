@@ -11,17 +11,19 @@ const {
     deleteProductInCart
 } = new CartManagerController()
 
-cartRouter.get('/', getCarts)
+cartRouter
+    .get('/', getCarts)
 
-cartRouter.get('/:cartID', getCartByID)
+    .get('/:cartID', getCartByID)
 
-cartRouter.post('/', createCart)
+    .post('/', createCart)
 
-cartRouter.post('/:cartID/products/:prodID' , addProductToCart)
+    .post('/:cartID/products/:prodID' , addProductToCart)
 
-cartRouter.delete('/:cartID' , deleteCart)
+    .delete('/:cartID' , deleteCart)
 
-cartRouter.delete('/:cartID/products/:prodID' , deleteProductInCart)
+    .delete('/:cartID/products/:prodID' , deleteProductInCart)
+
 
 module.exports = {
     cartRouter

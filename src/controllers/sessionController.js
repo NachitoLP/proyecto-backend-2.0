@@ -1,4 +1,4 @@
-const { userModel } = require('../dao/models/usersModel')
+const { userModel } = require('../dao/mongo/models/usersModel')
 const { createHashedPass } = require('../utils/bcryptPass')
 
 class sessionManagerController {

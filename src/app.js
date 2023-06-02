@@ -12,9 +12,6 @@ const initReal = require('./utils/sockets/realTimeSocket');
 
 const app = express()
 
-objConfig.dbConnection()
-objConfig.dbConnection()
-
 const portEnv = objConfig.port
 
 

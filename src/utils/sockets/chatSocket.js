@@ -1,4 +1,4 @@
-const { MsgModelMongo } = require("../../dao/chatManager")
+const { MsgModelMongo } = require("../../dao/mongo/chatManagerMongo")
 
 let msgModel = new MsgModelMongo()
 const messages = []

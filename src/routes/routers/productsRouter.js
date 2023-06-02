@@ -11,15 +11,16 @@ const {
     deleteProduct
 } = new ProductManagerController()
 
-productRouter.get('/', getProducts)
+productRouter
+    .get('/', getProducts)
 
-productRouter.get('/:prodID', getProductByID)
+    .get('/:prodID', getProductByID)
 
-productRouter.post('/' , addProduct)
+    .post('/' , addProduct)
 
-productRouter.put('/:name' , updateProduct)
+    .put('/:name' , updateProduct)
 
-productRouter.delete('/:name', deleteProduct)
+    .delete('/:name', deleteProduct)
 
 
 module.exports = {

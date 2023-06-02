@@ -4,6 +4,7 @@ const paginate = require('mongoose-paginate-v2')
 const collection = 'users';
 
 const userSchema = new Schema({
+    full_name: String,
     username: {
         type: String,
         unique: true,

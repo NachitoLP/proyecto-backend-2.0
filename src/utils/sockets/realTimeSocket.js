@@ -1,4 +1,4 @@
-const { ProductManagerMongo } = require("../../dao/productManagerMongo")
+const { ProductManagerMongo } = require("../../dao/mongo/productManagerMongo")
 
 let productManager = new ProductManagerMongo()
 

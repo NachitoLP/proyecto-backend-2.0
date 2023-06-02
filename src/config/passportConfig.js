@@ -1,6 +1,7 @@
 const passport = require("passport")
-const { userModel } = require("../dao/models/usersModel")
+const { userModel } = require("../dao/mongo/models/usersModel")
 const { createHashedPass, checkValidPassword } = require("../utils/bcryptPass")
+const { UserDto } = require("../dto/userDto")
 const LocalStrategy = require("passport-local").Strategy
 const GitHubStrategy = require("passport-github2").Strategy
 
@@ -23,7 +24,7 @@ const initializePassport = () => {
         
                 const hashedPassword = createHashedPass(password)
         
-                const newUser = {
+                const newUserDTO = {
                     first_name,
                     username,
                     last_name,
@@ -32,16 +33,19 @@ const initializePassport = () => {
                     rol:'usuario'
                 }
         
+                
+                const newUser = new UserDto(newUserDTO)
+                
                 if (email === 'adminCoder@coder.com' && password == 'adminCod3r123') {
                     newUser.rol = 'admin'
                 }
-                
+
                 req.session.user = {
                     username: newUser.username,
                     password: newUser.password,
                     rol: newUser.rol
                 }
-        
+
                 let result = await userModel.create(newUser)
                 return done( null, result )
             } 
@@ -80,7 +84,7 @@ const initializePassport = () => {
                     let password = "1234"
                     const hashedPassword = createHashedPass(password)
 
-                    const newUser = {
+                    const newUserDTO = {
                         first_name: profile._json.name.split(' ')[0],
                         last_name: profile._json.name.split(' ')[1],
                         username: profile.username,
@@ -88,6 +92,7 @@ const initializePassport = () => {
                         password: hashedPassword,
                         rol: 'usuario'
                     }
+                    const newUser = new UserDto(newUserDTO)
 
                     const result = await userModel.create(newUser)
                     return done(null , result)

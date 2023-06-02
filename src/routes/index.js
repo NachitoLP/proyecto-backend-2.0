@@ -2,6 +2,7 @@ const {Router} = require('express')
 const cookieParser = require('cookie-parser')
 const session = require('express-session')
 const { create } = require('connect-mongo')
+const passport = require('passport');
 
 const { userRouter } = require('./routers/userRouter');
 const { cartRouter } = require('./routers/cartRouter');
@@ -13,7 +14,7 @@ const { sessionRouter } = require('./routers/sessionRouter');
 const { objConfig } = require('../config/config');
 const { homeRouter } = require('./routers/homeRouter');
 const { initializePassport } = require('../config/passportConfig');
-const passport = require('passport');
+const { ordersRouter } = require('./routers/ordersRouter');
 
 const routerApp = Router()
 
@@ -72,6 +73,9 @@ routerApp.use('/views/socket' , mid1 , viewSocket)
 
 // Views de Cart
 routerApp.use('/api/carts' , mid1 , cartRouter)
+
+// Views de Order
+routerApp.use('/api/orders', mid1, ordersRouter)
 
 routerApp.use(( err , req , res , next ) => {
     console.log(err);

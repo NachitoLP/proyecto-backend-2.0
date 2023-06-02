@@ -1,12 +1,12 @@
-const { UserManagerMongo } = require("../dao/userManagerMongo");
-let userManager = new UserManagerMongo()
+const { UsersDao } = require("../dao/factory");
+let userManager = new UsersDao()
 
 
 class UserManagerController {
     getUsers = async ( req , res ) => {
         try {
             const {limit,page=1} = req.query;
-            let {docs , hasPrevPage, hasNextPage, prevPage, nextPage} = await userManager.getUsers(limit,page)
+            let {docs , hasPrevPage, hasNextPage, prevPage, nextPage} = await userManager.get(limit,page)
             let userRol = (req.session.user.rol === "admin")
     
             return res.status(201).render('users', {
@@ -25,20 +25,21 @@ class UserManagerController {
 
     getUserByName = async ( req , res ) => {
         try {
-            const {name} = req.params
+            const {first_name} = req.params
             const {limit,page=1} = req.query;
-            let {docs , hasPrevPage, hasNextPage, prevPage, nextPage} = await userManager.getUserByName(name , limit , page)
+            let {docs , hasPrevPage, hasNextPage, prevPage, nextPage} = await userManager.getByName(first_name , limit , page)
     
             if(docs.length === 0) {
                 return res.status(404).send("User not found.")
             }
-    
+            let userRol = (req.session.user.rol === "admin")
             return res.status(201).render('users', {
                 users: docs, 
                 hasPrevPage, 
                 hasNextPage, 
                 prevPage, 
-                nextPage
+                nextPage,
+                rol: userRol
             })
         } 
         catch (error) {
@@ -51,7 +52,7 @@ class UserManagerController {
             const { first_name , last_name , gender , email } = req.body
     
             let newUser = { first_name , last_name , gender , email }
-            userManager.addUser( newUser )
+            userManager.create( newUser )
     
             return res.json({
                 message: 'Usuario creado.',

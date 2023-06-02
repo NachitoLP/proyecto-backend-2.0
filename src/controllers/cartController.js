@@ -1,5 +1,5 @@
-const { CartManagerMongo } = require("../dao/cartManagerMongo");
-const cartManager = new CartManagerMongo()
+const { CartsDao } = require("../dao/factory");
+const cartManager = new CartsDao()
 
 class CartManagerController {
     getCarts = async ( req , res ) => {
