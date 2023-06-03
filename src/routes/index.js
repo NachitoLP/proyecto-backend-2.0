@@ -15,6 +15,8 @@ const { objConfig } = require('../config/config');
 const { homeRouter } = require('./routers/homeRouter');
 const { initializePassport } = require('../config/passportConfig');
 const { ordersRouter } = require('./routers/ordersRouter');
+const mailRouter = require('./routers/mailRouter');
+const smsRouter = require('./routers/smsRouter');
 
 const routerApp = Router()
 
@@ -76,6 +78,12 @@ routerApp.use('/api/carts' , mid1 , cartRouter)
 
 // Views de Order
 routerApp.use('/api/orders', mid1, ordersRouter)
+
+// View de Mail
+routerApp.use('/api/mail' , mid1 , mailRouter)
+
+// View de SMS
+routerApp.use('/api/sms' , mid1 , smsRouter)
 
 routerApp.use(( err , req , res , next ) => {
     console.log(err);
