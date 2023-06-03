@@ -9,7 +9,10 @@ class OrderManagerController {
 
             if (!orders) return res.status(401).send('No hay órdenes disponibles por el momento.')
 
-            return res.status(201).send(orders)
+            return res.status(201).send({
+                status: 'success',
+                payload: orders
+            })
         } 
         catch (error) {
             console.log(error);
@@ -24,7 +27,10 @@ class OrderManagerController {
             if (!order) return res.status(401).send('No se encontró una orden con esa ID.')
             
 
-            return res.status(201).send(order)
+            return res.status(201).send({
+                status: 'success',
+                payload: order
+            })
         } 
         catch (error) {
             console.log(error);
@@ -33,7 +39,13 @@ class OrderManagerController {
 
     addOrder = async ( req , res ) => {
         try {
+            const {body} = req
+            let result = await orderManager.create(body)
             
+            return res.status(201).send({
+                status: 'success',
+                payload: result
+            })
         } 
         catch (error) {
             console.log(error);
@@ -42,7 +54,14 @@ class OrderManagerController {
 
     updateOrder = async ( req , res ) => {
         try {
+            const {id} = req.params
+            const {body} = req
+            let result = await orderManager.update(id , body)
             
+            return res.status(201).send({
+                status: 'success',
+                payload: result
+            })
         } 
         catch (error) {
             console.log(error);
