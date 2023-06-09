@@ -14,7 +14,7 @@ class OrderManagerMongo {
     }
 
     update = async (id , order) => {
-        return await orderModel.updateOne({_id: id} , {order})
+        return await orderModel.findByIdAndUpdate({_id: id} , {order})
     }
 
     delete = async (id) => {

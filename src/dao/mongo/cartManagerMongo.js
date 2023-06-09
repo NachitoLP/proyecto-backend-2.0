@@ -1,4 +1,6 @@
 const { cartModel } = require("./models/cartsModel");
+const { userModel } = require("./models/usersModel");
+
 
 class CartManagerMongo{
     getCarts = async (limit,page) => {
@@ -8,21 +10,44 @@ class CartManagerMongo{
         }
         return cart
     }
-
+    
     createCart = async ( cart ) => {
         return await cartModel.create(cart)
     }
-
-    getCartById = async ( cartID ) => {
+    
+    getCartById = async ( cartID , username ) => {
         let cart = await cartModel.find({_id:cartID})
+        
         if(cart.length == 0) {
-            return console.log("No existe el carrito.");
+            const { UsersDao, CartsDao } = require("../factory");
+
+            let userManager = new UsersDao()
+            const cartManager = new CartsDao()
+            
+            const userInDB = await userManager.getByUsername(username)
+            let userID = userInDB._id
+
+            const newCart = await cartManager.createCart({products: []})
+
+            let cartID = newCart._id
+
+            userInDB.cart_id = cartID
+
+            newCart.user.push({
+                _id:userID
+            })
+            
+            await userModel.findByIdAndUpdate({_id: userID}, userInDB)
+            await cartModel.findByIdAndUpdate({_id: cartID}, newCart)
+
+            return newCart
         }
+
         return cart
     }
 
     addProductToCart = async ( cartID, prodID ) => {
-        let cart = await cartModel.find({_id: cartID})
+        let cart = await cartModel.findOne({_id: cartID})
         let productFound = cart.products.findIndex(product => product._id == prodID)
 
         if (productFound === -1) {
@@ -46,7 +71,7 @@ class CartManagerMongo{
     }
 
     deleteProductInCart = async ( cartID , prodID ) => {
-        let cart = await cartModel.find({_id: cartID})
+        let cart = await cartModel.findOne({_id: cartID})
         let productFound = cart.products.findIndex(product => product._id == prodID)
 
         if (productFound === -1) {

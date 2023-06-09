@@ -46,8 +46,8 @@
             <div>
                 <br>
                 <p>${{this.price}}</p>
-                <a href="/api/products/{{this._id}}">Detalle</a>
-                <a href="#">Añadir al carrito</a>
+                <a href="/api/products/id/{{this._id}}">Detalle</a>
+                <a href="/api/carts/{{this._id}}">Añadir al carrito</a>
             </div>
         </div>
     {{/each}}

@@ -1,5 +1,6 @@
 const { Router } = require('express')
 const productRouter = Router();
+const productRouterAdmin = Router();
 
 const ProductManagerController = require('../../controllers/productsController');
 
@@ -14,15 +15,21 @@ const {
 productRouter
     .get('/', getProducts)
 
-    .get('/:prodID', getProductByID)
+    .get('/id/:prodID', getProductByID)
+
+productRouterAdmin
+    .get('/', getProducts)
+
+    .get('/id/:prodID', getProductByID)
 
     .post('/' , addProduct)
 
-    .put('/:name' , updateProduct)
+    .put('/name/:name' , updateProduct)
 
-    .delete('/:name', deleteProduct)
+    .delete('/name/:name', deleteProduct)
 
 
 module.exports = {
-    productRouter
+    productRouter,
+    productRouterAdmin
 }

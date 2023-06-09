@@ -14,6 +14,12 @@ const cartSchema = new Schema({
             type: Number,
             required: true
         }
+    }],
+    user: [{
+        _id: {
+            type: Schema.Types.ObjectId,
+            ref: "users"
+        }
     }]
 });
 

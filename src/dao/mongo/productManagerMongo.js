@@ -2,11 +2,11 @@ const { productsModel } = require("./models/productsModel")
 
 
 class ProductManagerMongo{
-    getProducts = async (limit,page) => {
+    get = async (limit,page) => {
         return await productsModel.paginate({status:true},{limit:limit||10, page:page||1, lean:true})
     }
 
-    getProductById = async ( prodID ) => {
+    getById = async ( prodID ) => {
         let product = await productsModel.find({_id:prodID})
         if(product.length == 0) {
             return console.log("No existe el producto.");
@@ -14,22 +14,16 @@ class ProductManagerMongo{
         return product
     }
 
-    addProduct = async (newProduct) => {
+    create = async (newProduct) => {
         return await productsModel.create(newProduct)
     }
 
-    updateProductByName = async ( name , product ) => {
-        return await productsModel.updateOne({name:name}, {
-            price: product.price,
-            description: product.description,
-            code: product.code,
-            stock: product.stock,
-            href: product.href||"Sin imagen"
-        })
+    update = async ( id , product ) => {
+        return await productsModel.findByIdAndUpdate({_id:id}, {product})
     }
 
-    deleteProductByName = async ( name ) => {
-        return await productsModel.updateOne({name:name},{status:false})
+    delete = async ( id ) => {
+        return await productsModel.updateOne({_id:id},{status:false})
     }
 }
 

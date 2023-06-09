@@ -5,10 +5,10 @@ const { create } = require('connect-mongo')
 const passport = require('passport');
 
 const { userRouter } = require('./routers/userRouter');
-const { cartRouter } = require('./routers/cartRouter');
+const { cartRouter, cartRouterAdmin } = require('./routers/cartRouter');
 const { viewSocket } = require('./routerViews/viewSocket');
 const { realTimeProducts } = require('./routerViews/viewRealProducts');
-const { productRouter } = require('./routers/productsRouter');
+const { productRouter, productRouterAdmin } = require('./routers/productsRouter');
 const { cookieRouter } = require('./routers/cookiesRouter');
 const { sessionRouter } = require('./routers/sessionRouter');
 const { objConfig } = require('../config/config');
@@ -17,6 +17,7 @@ const { initializePassport } = require('../config/passportConfig');
 const { ordersRouter } = require('./routers/ordersRouter');
 const mailRouter = require('./routers/mailRouter');
 const smsRouter = require('./routers/smsRouter');
+const { midSession, midAdmin } = require('../middleware/sessionMiddleware');
 
 const routerApp = Router()
 
@@ -38,52 +39,45 @@ routerApp.use(session({
     saveUninitialized: true
 }))
 
-let mid1 = function (req , res , next)  {
-    try {
-        if (!req.session.user) {
-            return res.redirect('/session/login')
-        }
-        next()
-    } catch (error) {
-        console.log(error);
-    }
-}
+
 initializePassport()
 routerApp.use(passport.initialize())
 routerApp.use(passport.session())
 
 
 // Cookies Route
-routerApp.use('/api/cookie' , mid1 , cookieRouter)
+routerApp.use('/api/cookie' , midSession , cookieRouter)
 
 routerApp.use('/session', sessionRouter)
 
 // Views de home
-routerApp.use('/home' , mid1 , homeRouter)
+routerApp.use('/home' , midSession , homeRouter)
 
 // Views de products 
-routerApp.use('/api/products' , mid1 , productRouter)
+routerApp.use('/api/products' , midSession , productRouter)
+routerApp.use('/api/products/admin' , midSession , midAdmin , productRouterAdmin)
 
 // Socket products
-routerApp.use('/api/realtimeproducts' , mid1 , realTimeProducts)
+routerApp.use('/api/realtimeproducts' , midSession , realTimeProducts)
 
 // Views de usuario 1
-routerApp.use('/api/users' , mid1 , userRouter)
+routerApp.use('/api/users' , midSession , userRouter)
 
 // Views de socket
-routerApp.use('/views/socket' , mid1 , viewSocket)
+routerApp.use('/views/socket' , midSession , viewSocket)
 
 // Views de Cart
-routerApp.use('/api/carts' , mid1 , cartRouter)
+routerApp.use('/api/carts' , midSession , cartRouter)
+routerApp.use('/api/carts/admin' , midSession , midAdmin , cartRouterAdmin)
 
 // Views de Order
-routerApp.use('/api/orders', mid1, ordersRouter)
+routerApp.use('/api/orders', midSession , ordersRouter)
 
 // View de Mail
-routerApp.use('/api/mail' , mid1 , mailRouter)
+routerApp.use('/api/mail' , midSession , mailRouter)
 
 // View de SMS
-routerApp.use('/api/sms' , mid1 , smsRouter)
+routerApp.use('/api/sms' , midSession , smsRouter)
 
 routerApp.use(( err , req , res , next ) => {
     console.log(err);
@@ -91,6 +85,5 @@ routerApp.use(( err , req , res , next ) => {
 })
 
 module.exports = {
-    routerApp,
-    mid1
+    routerApp
 }

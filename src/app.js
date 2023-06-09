@@ -6,9 +6,10 @@ const Handlebars = require('handlebars')
 const {allowInsecurePrototypeAccess} = require('@handlebars/allow-prototype-access')
 
 const { objConfig } = require('./config/config');
-const { routerApp, mid1 } = require('./routes');
+const { routerApp } = require('./routes');
 const initChatSocket = require('./utils/sockets/chatSocket');
 const initReal = require('./utils/sockets/realTimeSocket');
+const { midSession } = require('./middleware/sessionMiddleware');
 
 const app = express()
 
@@ -29,7 +30,7 @@ app.use(express.urlencoded({ extended: true }))
 
 app.use(routerApp)
 
-app.get('/' , mid1 , async ( req , res ) => {
+app.get('/' , midSession , async ( req , res ) => {
     res.redirect('/home')
 })
 

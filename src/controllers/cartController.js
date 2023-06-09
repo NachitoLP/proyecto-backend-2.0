@@ -1,5 +1,13 @@
-const { CartsDao } = require("../dao/factory");
+const { CartsDao, UsersDao } = require("../dao/factory");
+const { cartModel } = require("../dao/mongo/models/cartsModel");
+const { orderModel } = require("../dao/mongo/models/ordersModel");
+const { productsModel } = require("../dao/mongo/models/productsModel");
+const { userModel } = require("../dao/mongo/models/usersModel");
+const { OrderManagerMongo } = require("../dao/mongo/orderManagerMongo");
+
 const cartManager = new CartsDao()
+let userManager = new UsersDao()
+let orderManager = new OrderManagerMongo()
 
 class CartManagerController {
     getCarts = async ( req , res ) => {
@@ -26,9 +34,22 @@ class CartManagerController {
 
     getCartByID = async ( req , res ) => {
         try {
-            const { cartID } = req.params
-            const newCart = await cartManager.getCartById(cartID)
-            return res.status(200).render('carts', {newCart})
+            const username = req.session.user.username
+            const {cart_id} = await userManager.getByUsername(username)
+
+            const newCart = await cartManager.getCartById(cart_id , username)
+
+            const newCart2 = await cartModel.findOne({_id:cart_id})
+
+            let noProducts = false
+
+            if (newCart2) {
+                if(newCart2.products.length < 1) {
+                    noProducts = true
+                }
+            }
+
+            return res.status(200).render('carts', {newCart,noProducts})
         } 
         catch (error) {
             console.log(error);
@@ -37,8 +58,29 @@ class CartManagerController {
 
     createCart = async ( req , res ) => {
         try {
+            let username = req.body.username
+
+            const userInDB = await userManager.getByUsername(username)
+            let userID = userInDB._id
+
+            if (userInDB.cart_id) {
+                return res.status(401).send('Este usuario ya tiene un carrito asociado.')
+            }
+
             const newCart = await cartManager.createCart({products: []})
-            res.status(200).send(newCart)
+
+            let cartID = newCart._id
+
+            userInDB.cart_id = cartID
+
+            newCart.user.push({
+                _id:userID
+            })
+            
+            await userModel.findByIdAndUpdate({_id: userID}, userInDB)
+            await cartModel.findByIdAndUpdate({_id: cartID}, newCart)
+
+            res.redirect('/home')
         } 
         catch (error) {
             console.log(error);
@@ -47,7 +89,13 @@ class CartManagerController {
 
     addProductToCart = async ( req , res ) => {
         try {
-            const { cartID , prodID } = req.params
+            const { prodID } = req.params
+            
+            const username = req.session.user.username
+            let user = await userManager.getByUsername(username)
+
+            let cartID = user.cart_id
+
             const newProdInCart = await cartManager.addProductToCart( cartID , prodID )
             res.status(200).send(newProdInCart)
         } 
@@ -70,16 +118,84 @@ class CartManagerController {
         }
     }
 
-    deleteProductInCart = async ( req , res ) => {
+    deleteProductInCart = async ( cartID , prodID , req , res ) => {
         try {
-            const { cartID , prodID } = req.params
-            const deleteCart = await cartManager.deleteProductInCart( cartID , prodID )
-            res.status(200).send({
-                cart: deleteCart,
-                message: "Producto borrado."
-            })
+            if (!cartID && !prodID) {
+                const { cartID , prodID } = req.params
+                const deleteCart = await cartManager.deleteProductInCart( cartID , prodID )
+                return res.status(200).send({
+                    cart: deleteCart,
+                    message: "Producto borrado."
+                })
+            }
+            await cartManager.deleteProductInCart( cartID , prodID )
         } 
         catch (error) {
+            console.log(error);
+        }
+    }
+
+    purchaseCart = async ( req , res ) => {
+        try {
+            const username = req.session.user.username
+            let user = await userManager.getByUsername(username)
+
+            let cartID = user.cart_id
+            let cart = await cartModel.findOne({_id:cartID})
+
+            let products = cart.products
+            let total = 0
+
+            let order = {
+                user: [],
+                products: [],
+                total,
+                purchase_datetime: Date().toString()
+            }
+            order.user.push({
+                _id:user._id
+            })
+
+            let result = await orderManager.create(order)
+
+            let orderID = result._id
+            
+            products.forEach(async product => {
+
+                let productDetail = await productsModel.findOne({_id:product._id})
+
+                if (productDetail.stock < product.quantity) {
+                    let productIndex = products.findIndex(product => product._id == productDetail._id)
+                    products.splice(1,productIndex)
+                    console.log(`No hay suficiente stock de ${productDetail.name}`);
+                }
+                else {
+                    order.total += productDetail.price * product.quantity
+                    order.products.push({
+                        _id: productDetail._id,
+                        quantity: product.quantity
+                    })
+                    
+                    productDetail.stock - products.quantity
+
+                    if (productDetail.stock === 0) {
+                        productDetail.status = false
+                    }
+
+                    await productsModel.findByIdAndUpdate({_id:product._id},{productDetail})
+                    
+                    await orderModel.findByIdAndUpdate({_id:orderID}, order)
+
+                    await cartModel.updateOne({_id:cartID},{$pull:{products:{_id:product._id}}})
+                }
+            });
+            
+
+            return res.send({
+                status: 'Succesful',
+                message: `Compra completada. ID del ticket: ${orderID}` 
+            })
+        } catch (error) {
             console.log(error);
         }
     }

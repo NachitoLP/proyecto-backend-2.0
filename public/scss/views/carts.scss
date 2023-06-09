@@ -1,10 +1,10 @@
 .div_carritos{
-    display: flex;
-    justify-content: center;
+    text-align: center;
     
     .div_carrito_individual {
         margin: 20px;
-        text-align: center;
+        display: flex;
+        justify-content: center;
         .div_product{
             background-color: white;
             display: flex;

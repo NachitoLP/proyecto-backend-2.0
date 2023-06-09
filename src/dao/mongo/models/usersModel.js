@@ -28,6 +28,10 @@ const userSchema = new Schema({
     },
     rol: {
         type: String
+    },
+    cart_id: {
+        type: Schema.Types.ObjectId,
+        ref: "carts"
     }
 });
 

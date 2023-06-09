@@ -5,7 +5,7 @@ class ProductManagerController {
     getProducts = async ( req , res ) => {
         try {
             const {limit , page} = req.query;
-            let {docs , hasPrevPage, hasNextPage, prevPage, nextPage} = await productManager.getProducts(limit , page)
+            let {docs , hasPrevPage, hasNextPage, prevPage, nextPage} = await productManager.get(limit , page)
     
             if (!docs) {
                 return res.status(400).send('No hay productos')
@@ -29,7 +29,7 @@ class ProductManagerController {
     getProductByID = async ( req , res) => {
         try {
             const {prodID} = req.params
-            let product = await productManager.getProductById(prodID)
+            let product = await productManager.getById(prodID)
             return res.status(200).render('product_id' , {product})
         } catch (error) {
             console.log(error);
@@ -45,7 +45,7 @@ class ProductManagerController {
             }
     
             const newProduct = { name , description , price , stock , code , status: true }
-            let result = await productManager.addProduct(newProduct)
+            let result = await productManager.create(newProduct)
     
             return res.status(201).send({
                 product: result,
@@ -59,14 +59,14 @@ class ProductManagerController {
 
     updateProduct = async ( req , res ) => {
         try {
-            const { name } = req.params
+            const { pid } = req.params
             let product = req.body
         
             if(!product.description || !product.price || !product.stock || !product.code) {
                 return res.status(400).send("No se han completado todos los campos.")
             }
     
-            let result = await productManager.updateProductByName( name , product )
+            let result = await productManager.update( pid , product )
     
             return res.status(201).send({
                 products: result,
@@ -80,9 +80,9 @@ class ProductManagerController {
 
     deleteProduct = async ( req , res ) => {
         try {
-            const { name } = req.params
+            const { pid } = req.params
         
-            let deleteProduct = await productManager.deleteProductByName(name)
+            let deleteProduct = await productManager.delete(pid)
             
             return res.status(200).send({message: 'Producto borrado', deleteProduct})
         } 

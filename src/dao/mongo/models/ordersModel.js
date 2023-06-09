@@ -20,7 +20,7 @@ const orderSchema = new Schema({
         }
     }],
     total: Number,
-    created: Date
+    purchase_datetime: Date
 })
 
 const orderModel = model(collection , orderSchema)

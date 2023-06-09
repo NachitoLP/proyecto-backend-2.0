@@ -1,30 +1,32 @@
 const { Router } = require('express');
 const CartManagerController = require('../../controllers/cartController');
 const cartRouter = Router();
+const cartRouterAdmin = Router();
 
 const {
     getCarts,
     getCartByID,
-    createCart,
     addProductToCart,
     deleteCart,
-    deleteProductInCart
+    deleteProductInCart,
+    purchaseCart
 } = new CartManagerController()
 
 cartRouter
-    .get('/', getCarts)
+    .get('/', getCartByID)
 
-    .get('/:cartID', getCartByID)
+    .get('/purchase' , purchaseCart)
 
-    .post('/', createCart)
-
-    .post('/:cartID/products/:prodID' , addProductToCart)
-
-    .delete('/:cartID' , deleteCart)
+    .get('/:prodID' , addProductToCart)
 
     .delete('/:cartID/products/:prodID' , deleteProductInCart)
 
+cartRouterAdmin
+    .get('/', getCarts)
+
+    .delete('/:cartID' , deleteCart)
 
 module.exports = {
-    cartRouter
+    cartRouter,
+    cartRouterAdmin
 }

@@ -68,6 +68,9 @@ class sessionManagerController {
         if (!req.session.user) {
             res.redirect('/session/login')
         }
+        if (req.session.user.rol != "admin") {
+            return res.status(401).send({status: 'error', message: 'Debés ser administrador para ingresar a esta sección.'})
+        }
         res.send(req.session.user)
     }
 

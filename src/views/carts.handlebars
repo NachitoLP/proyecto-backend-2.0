@@ -31,22 +31,28 @@
         </ul>
     </nav>
 </header>
-<div class="div_carritos">
-    {{#each newCart}}
-        <div class="div_carrito_individual">
+
+{{#if noProducts}}
+    <h3 style="text-align: center;">No hay productos agregados al carrito.</h3>
+    {{else}}
+        <div class="div_carritos">
             <h2>Carrito:</h2>
-            {{#each this.products}}
-                <div class="div_product">
-                    <h3>{{this._id.name}}</h3>
-                    <div>
-                        <p>${{this._id.price}}</p>
-                        <p>Cantidad: {{this.quantity}}</p>
-                    </div>
+            {{#each newCart}}
+                <div class="div_carrito_individual">
+                    {{#each this.products}}
+                        <div class="div_product">
+                            <h3>{{this._id.name}}</h3>
+                            <div>
+                                <p>${{this._id.price}}</p>
+                                <p>Cantidad: {{this.quantity}}</p>
+                            </div>
+                        </div>
+                    {{/each}}
                 </div>
             {{/each}}
+            <a href="/api/carts/purchase">Realizar compra</a>
         </div>
-    {{/each}}
-</div>
+{{/if}}
 <div class="div_botones_prev_next">
     {{#if hasPrevPage}}
         <a href="/api/carts?page={{prevPage}}">⬅</a>
