@@ -4,6 +4,7 @@ const { orderModel } = require("../dao/mongo/models/ordersModel");
 const { productsModel } = require("../dao/mongo/models/productsModel");
 const { userModel } = require("../dao/mongo/models/usersModel");
 const { OrderManagerMongo } = require("../dao/mongo/orderManagerMongo");
+const { sendMailTransport } = require("../utils/nodemailer");
 
 const cartManager = new CartsDao()
 let userManager = new UsersDao()
@@ -96,8 +97,8 @@ class CartManagerController {
 
             let cartID = user.cart_id
 
-            const newProdInCart = await cartManager.addProductToCart( cartID , prodID )
-            res.status(200).send(newProdInCart)
+            await cartManager.addProductToCart( cartID , prodID )
+            res.redirect('/api/carts')
         } 
         catch (error) {
             console.log(error);
@@ -166,8 +167,12 @@ class CartManagerController {
 
                 if (productDetail.stock < product.quantity) {
                     let productIndex = products.findIndex(product => product._id == productDetail._id)
-                    products.splice(1,productIndex)
-                    console.log(`No hay suficiente stock de ${productDetail.name}`);
+                    products.splice(productIndex,1)
+
+                    if (products.length == 0) {
+                        await orderModel.findByIdAndDelete({_id:orderID})
+                        return console.log(`La compra no se pudo realizar porque no hay stock de ${productDetail.name}`);;
+                    }
                 }
                 else {
                     order.total += productDetail.price * product.quantity
@@ -189,12 +194,10 @@ class CartManagerController {
                     await cartModel.updateOne({_id:cartID},{$pull:{products:{_id:product._id}}})
                 }
             });
-            
 
-            return res.send({
-                status: 'Succesful',
-                message: `Compra completada. ID del ticket: ${orderID}` 
-            })
+            await sendMailTransport(user.email,orderID)
+
+            return res.render('purchase')
         } catch (error) {
             console.log(error);
         }

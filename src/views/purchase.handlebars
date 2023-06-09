@@ -1,0 +1,38 @@
+<header class="header" id="arriba">
+    <nav class="header_nav">
+        <input type="checkbox" id="check">
+        <label for="check" class="btn_check"><i class="fa-solid fa-bars"></i></label>
+        <ul class="header_navbar_list">
+            <div class="navbar_div_icon_home">
+                <a href="/home">
+                    <div class="nav_login">
+                        <span class="material-symbols-outlined">home</span>
+                        <label>Home</label>
+                    </div>
+                </a>
+            </div>
+            <li><a href="/api/products"><i class="fa-solid fa-house list_icons"></i>Productos</a></li>
+            <li><a href="/api/realtimeproducts"><i class="fa-solid fa-book list_icons"></i>RealTime</a></li>
+            <li><a href="/views/socket"><i class="fa-solid fa-folder list_icons"></i>Chat</a></li>
+            <div class="navbar_div_icons">
+                <a href="/api/carts">
+                    <div class="nav_login">
+                        <span class="material-symbols-outlined">shopping_cart</span>
+                        <label>Carrito</label>
+                    </div>
+                </a>
+                <a href="/session/logout">
+                    <div class="nav_login">
+                        <span class="material-symbols-outlined">logout</span>
+                        <label>Log Out</label>
+                    </div>
+                </a>
+            </div>
+        </ul>
+    </nav>
+</header>
+<div class="div_purchased">
+    <h4>¡La compra ha sido realizada con éxito!</h4>
+    <p>Se te enviará un correo con el ID de la orden.</p>
+    <a href="/home">Volver al inicio.</a>
+</div>

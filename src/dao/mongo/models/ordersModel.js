@@ -19,6 +19,7 @@ const orderSchema = new Schema({
             required: true
         }
     }],
+    status: Boolean,
     total: Number,
     purchase_datetime: Date
 })

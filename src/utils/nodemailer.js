@@ -13,15 +13,16 @@ const transport = nodemailer.createTransport({
     }
 })
 
-const sendMailTransport = async () => {
+const sendMailTransport = async (email , oid) => {
     transport.sendMail({
         from: `Coder test ${objConfig.gmail_user}`,
-        to: `${objConfig.gmail_user}`,
-        subject: 'Correo de prueba',
+        to: `${email}`,
+        subject: 'Recibo de compra.',
         html: `
-            <h3>Correo del más capito</h3>
+            <h3>Su compra ha sido realizada con éxito.</h3>
             <div>
-                <p>Puto el que lee</p>
+                <p>Le dejamos el ID del ticket. No estaremos comunicando a la brevedad para acordar el envío.</p>
+                <p>ID: ${oid}</p>
             </div>
         `,
         attachments: []
