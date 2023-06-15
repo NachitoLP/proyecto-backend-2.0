@@ -12,7 +12,6 @@
                 </a>
             </div>
             <li><a href="/api/products"><i class="fa-solid fa-house list_icons"></i>Productos</a></li>
-            <li><a href="/api/realtimeproducts"><i class="fa-solid fa-book list_icons"></i>RealTime</a></li>
             <li><a href="/views/socket"><i class="fa-solid fa-folder list_icons"></i>Chat</a></li>
             <div class="navbar_div_icons">
                 <a href="/api/carts">
@@ -41,11 +40,12 @@
                 <div class="div_carrito_individual">
                     {{#each this.products}}
                         <div class="div_product">
-                            <h3>{{this._id.name}}</h3>
+                            <h3>{{this._id.title}}</h3>
                             <div>
                                 <p>${{this._id.price}}</p>
                                 <p>Cantidad: {{this.quantity}}</p>
                             </div>
+                            <a href="/api/carts/productDelete/{{this._id._id}}">Eliminar</a>
                         </div>
                     {{/each}}
                 </div>

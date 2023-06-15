@@ -18,6 +18,8 @@ const { ordersRouter } = require('./routers/ordersRouter');
 const mailRouter = require('./routers/mailRouter');
 const smsRouter = require('./routers/smsRouter');
 const { midSession, midAdmin } = require('../middleware/sessionMiddleware');
+const compression = require('express-compression');
+const mockingRouter = require('./routers/mockingProducts');
 
 const routerApp = Router()
 
@@ -44,6 +46,12 @@ initializePassport()
 routerApp.use(passport.initialize())
 routerApp.use(passport.session())
 
+routerApp.use(compression({
+    brotli:{
+        enabled: true,
+        zlib: {}
+    }
+}))
 
 // Cookies Route
 routerApp.use('/api/cookie' , midSession , cookieRouter)
@@ -78,6 +86,9 @@ routerApp.use('/api/mail' , midSession , mailRouter)
 
 // View de SMS
 routerApp.use('/api/sms' , midSession , smsRouter)
+
+// View de MockingProducts
+routerApp.use('/api/mockingproducts' , midSession , mockingRouter)
 
 routerApp.use(( err , req , res , next ) => {
     console.log(err);

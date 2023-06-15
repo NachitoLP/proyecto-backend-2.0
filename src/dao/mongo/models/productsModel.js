@@ -4,7 +4,7 @@ const paginate = require('mongoose-paginate-v2')
 const collection = 'products';
 
 const productSchema = new Schema({
-    name: {
+    title: {
         type: String,
         required: true
     },
@@ -16,12 +16,11 @@ const productSchema = new Schema({
         type: Number,
         required: true
     },
-    href: {
+    department: {
         type: String
     },
-    stock: {
-        type: Number,
-        required: true
+    href: {
+        type: String
     },
     code: {
         type: String,

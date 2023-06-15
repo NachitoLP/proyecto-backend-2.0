@@ -121,7 +121,11 @@ class CartManagerController {
 
     deleteProductInCart = async ( cartID , prodID , req , res ) => {
         try {
-            if (!cartID && !prodID) {
+            let username = req.session.user.username
+            let user = await userModel.findOne(username)
+            let cartID = user.cart_id
+
+            if (!cartID) {
                 const { cartID , prodID } = req.params
                 const deleteCart = await cartManager.deleteProductInCart( cartID , prodID )
                 return res.status(200).send({
@@ -129,7 +133,18 @@ class CartManagerController {
                     message: "Producto borrado."
                 })
             }
+            if (!prodID) {
+                const { prodID } = req.params
+                const deleteCart = await cartManager.deleteProductInCart( cartID , prodID )
+                return res.status(200).send({
+                    cart: deleteCart,
+                    message: "Producto borrado."
+                })
+            }
             await cartManager.deleteProductInCart( cartID , prodID )
+            return res.status(200).send({
+                message: "Producto borrado."
+            })
         } 
         catch (error) {
             console.log(error);

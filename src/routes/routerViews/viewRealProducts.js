@@ -1,12 +1,12 @@
 const { Router } = require('express');
-const { ProductManagerMongo } = require('../../dao/mongo/productManagerMongo');
+const { ProductsDao } = require('../../dao/factory');
 
 const realTimeProducts = Router();
-let productManager = new ProductManagerMongo()
+let productManager = new ProductsDao()
 
 realTimeProducts.get('/' , async ( req , res ) => {
     try {
-        let {docs} = await productManager.getProducts()
+        let {docs} = await productManager.get()
 
         res.render('realtime' , {products:docs})
     } catch (error) {

@@ -19,7 +19,7 @@ cartRouter
 
     .get('/:prodID' , addProductToCart)
 
-    .delete('/:cartID/products/:prodID' , deleteProductInCart)
+    .get('/productDelete/:prodID' , deleteProductInCart) // No funciona
 
 cartRouterAdmin
     .get('/', getCarts)

@@ -1,3 +1,5 @@
+/* const { productsModel } = require('../dao/mongo/models/productsModel');
+const { generateProducts } = require('../utils/faker'); */
 const MongoSingleton = require('../utils/mongoSingleton');
 require('dotenv').config()
 
@@ -17,6 +19,16 @@ const objConfig = {
         MongoSingleton.getInstance()
     }
 }
+
+/* let funcion = async () => {
+    for(let i = 0; i < 100; i++) {
+        let product = generateProducts()
+        await productsModel.create(product)
+    }
+    return console.log("HOLA");
+}
+
+funcion() */
 
 module.exports = {
     objConfig
