@@ -71,12 +71,4 @@ mockingRouter.post('/' , async ( req , res ) => {
     }
 })
 
-mockingRouter.get('/buy' , async ( req , res ) => {
-    try {
-        
-    } catch (error) {
-        console.log(error);
-    }
-})
-
 module.exports = mockingRouter
