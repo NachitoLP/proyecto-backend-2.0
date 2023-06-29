@@ -9,7 +9,7 @@ const { objConfig } = require('./config/config');
 const { routerApp } = require('./routes');
 const initChatSocket = require('./utils/sockets/chatSocket');
 const initReal = require('./utils/sockets/realTimeSocket');
-const { midSession } = require('./middleware/sessionMiddleware');
+const { addLogger, logger } = require('./utils/logger');
 
 const app = express()
 
@@ -28,9 +28,13 @@ app.set('view engine', 'handlebars')
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
+// Loggers
+
+/* app.use(addLogger) */
+
 app.use(routerApp)
 
-app.get('/' , midSession , async ( req , res ) => {
+app.get('/' , async ( req , res ) => {
     res.redirect('/home')
 })
 
@@ -40,8 +44,8 @@ app.use(express.static( path.resolve(__dirname, '../public') ))
 // Routes
 
 const httpServer = app.listen(portEnv, (err) => {
-    if(err) return console.log("El servidor falló, vuelva a intentar nuevamente.");
-    console.log(`Servidor escuchando en el puerto ${portEnv}`);
+    if(err) return logger.fatal('El servidor falló. Intentelo más tarde.');
+    logger.info(`Servidor escuchando en el puerto ${portEnv}`);
 })
 
 

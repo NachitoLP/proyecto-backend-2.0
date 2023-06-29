@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const CartManagerController = require('../../controllers/cartController');
+const authRol = require('../../middleware/authRol');
 const cartRouter = Router();
-const cartRouterAdmin = Router();
 
 const {
     getCarts,
@@ -21,12 +21,10 @@ cartRouter
 
     .get('/productDelete/:prodID' , deleteProductInCart) // No funciona
 
-cartRouterAdmin
-    .get('/', getCarts)
+    .get('/', authRol("admin") , getCarts)
 
-    .delete('/:cartID' , deleteCart)
+    .delete('/:cartID' , authRol("admin") , deleteCart)
 
 module.exports = {
-    cartRouter,
-    cartRouterAdmin
+    cartRouter
 }

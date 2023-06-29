@@ -15,6 +15,7 @@ const objConfig = {
     twilio_auth_ID: process.env.AUTH_TOKEN,
     twilio_phone: process.env.TWILIO_PHONE,
     my_phone: process.env.JOAQUIN_PHONE,
+    enviroment: process.env.DEV_ENVIROMENT,
     dbConnection: async() => {
         MongoSingleton.getInstance()
     }

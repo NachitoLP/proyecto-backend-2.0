@@ -1,4 +1,5 @@
 const { ProductsDao } = require("../dao/factory");
+const { logger } = require("../utils/logger");
 const productManager = new ProductsDao();
 
 class ProductManagerController {
@@ -22,7 +23,7 @@ class ProductManagerController {
             })
         } 
         catch (error) {
-            console.log(error);
+            logger.error(error);
         }
     }
 
@@ -32,7 +33,7 @@ class ProductManagerController {
             let product = await productManager.getById(prodID)
             return res.status(200).render('product_id' , {product})
         } catch (error) {
-            console.log(error);
+            logger.error(error);
         }
     }
 
@@ -53,7 +54,7 @@ class ProductManagerController {
             })
         } 
         catch (error) {
-            console.log(error);
+            logger.error(error);
         }
     }
 
@@ -74,7 +75,7 @@ class ProductManagerController {
             })
         } 
         catch (error) {
-            console.log(error);
+            logger.error(error);
         }
     }
 
@@ -87,7 +88,7 @@ class ProductManagerController {
             return res.status(200).send({message: 'Producto borrado', deleteProduct})
         } 
         catch (error) {
-            console.log(error);
+            logger.error(error);
         }
     }
 }

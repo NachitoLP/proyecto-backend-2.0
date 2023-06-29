@@ -5,10 +5,10 @@ const { create } = require('connect-mongo')
 const passport = require('passport');
 
 const { userRouter } = require('./routers/userRouter');
-const { cartRouter, cartRouterAdmin } = require('./routers/cartRouter');
+const { cartRouter } = require('./routers/cartRouter');
 const { viewSocket } = require('./routerViews/viewSocket');
 const { realTimeProducts } = require('./routerViews/viewRealProducts');
-const { productRouter, productRouterAdmin } = require('./routers/productsRouter');
+const { productRouter } = require('./routers/productsRouter');
 const { cookieRouter } = require('./routers/cookiesRouter');
 const { sessionRouter } = require('./routers/sessionRouter');
 const { objConfig } = require('../config/config');
@@ -17,9 +17,10 @@ const { initializePassport } = require('../config/passportConfig');
 const { ordersRouter } = require('./routers/ordersRouter');
 const mailRouter = require('./routers/mailRouter');
 const smsRouter = require('./routers/smsRouter');
-const { midSession, midAdmin } = require('../middleware/sessionMiddleware');
+const { midSession } = require('../middleware/sessionMiddleware');
 const compression = require('express-compression');
 const mockingRouter = require('./routers/mockingProducts');
+const loggerRouter = require('./routers/loggerTest');
 
 const routerApp = Router()
 
@@ -59,11 +60,10 @@ routerApp.use('/api/cookie' , midSession , cookieRouter)
 routerApp.use('/session', sessionRouter)
 
 // Views de home
-routerApp.use('/home' , midSession , homeRouter)
+routerApp.use('/home' , homeRouter)
 
 // Views de products 
-routerApp.use('/api/products' , midSession , productRouter)
-routerApp.use('/api/products/admin' , midSession , midAdmin , productRouterAdmin)
+routerApp.use('/api/products' , productRouter)
 
 // Socket products
 routerApp.use('/api/realtimeproducts' , midSession , realTimeProducts)
@@ -72,11 +72,10 @@ routerApp.use('/api/realtimeproducts' , midSession , realTimeProducts)
 routerApp.use('/api/users' , midSession , userRouter)
 
 // Views de socket
-routerApp.use('/views/socket' , midSession , viewSocket)
+routerApp.use('/views/socket' , viewSocket)
 
 // Views de Cart
 routerApp.use('/api/carts' , midSession , cartRouter)
-routerApp.use('/api/carts/admin' , midSession , midAdmin , cartRouterAdmin)
 
 // Views de Order
 routerApp.use('/api/orders', midSession , ordersRouter)
@@ -89,6 +88,9 @@ routerApp.use('/api/sms' , midSession , smsRouter)
 
 // View de MockingProducts
 routerApp.use('/api/mockingproducts' , midSession , mockingRouter)
+
+// View de logger
+routerApp.use('/api/loggerTest' , loggerRouter)
 
 routerApp.use(( err , req , res , next ) => {
     console.log(err);

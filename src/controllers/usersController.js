@@ -1,4 +1,5 @@
 const { UsersDao } = require("../dao/factory");
+const { logger } = require("../utils/logger");
 let userManager = new UsersDao()
 
 
@@ -19,7 +20,7 @@ class UserManagerController {
             })
         } 
         catch (error) {
-            error
+            logger.error(error);
         }
     }
 
@@ -43,7 +44,7 @@ class UserManagerController {
             })
         } 
         catch (error) {
-            console.log(error);
+            logger.error(error);
         }
     }
 
@@ -60,7 +61,7 @@ class UserManagerController {
             })
         } 
         catch (error) {
-            console.log(error);
+            logger.error(error);
         }
     }
 }

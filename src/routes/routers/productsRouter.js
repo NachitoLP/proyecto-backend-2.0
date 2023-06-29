@@ -1,8 +1,9 @@
 const { Router } = require('express')
 const productRouter = Router();
-const productRouterAdmin = Router();
 
 const ProductManagerController = require('../../controllers/productsController');
+const authRol = require('../../middleware/authRol');
+const { midSession } = require('../../middleware/sessionMiddleware');
 
 const {
     getProducts,
@@ -17,19 +18,13 @@ productRouter
 
     .get('/id/:prodID', getProductByID)
 
-productRouterAdmin
-    .get('/', getProducts)
+    .post('/' , midSession , authRol("admin") , addProduct)
 
-    .get('/id/:prodID', getProductByID)
+    .put('/name/:name' , midSession , authRol("admin") , updateProduct)
 
-    .post('/' , addProduct)
-
-    .put('/name/:name' , updateProduct)
-
-    .delete('/name/:name', deleteProduct)
+    .delete('/name/:name' , midSession , authRol("admin") , deleteProduct)
 
 
 module.exports = {
-    productRouter,
-    productRouterAdmin
+    productRouter
 }

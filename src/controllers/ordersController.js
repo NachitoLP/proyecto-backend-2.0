@@ -1,4 +1,5 @@
 const { OrdersDao } = require("../dao/factory");
+const { logger } = require("../utils/logger");
 const orderManager = new OrdersDao()
 
 
@@ -15,7 +16,7 @@ class OrderManagerController {
             })
         } 
         catch (error) {
-            console.log(error);
+            logger.error(error);
         }
     }
 
@@ -33,7 +34,7 @@ class OrderManagerController {
             })
         } 
         catch (error) {
-            console.log(error);
+            logger.error(error);
         }
     }
 
@@ -48,7 +49,7 @@ class OrderManagerController {
             })
         } 
         catch (error) {
-            console.log(error);
+            logger.error(error);
         }
     }
 
@@ -64,7 +65,7 @@ class OrderManagerController {
             })
         } 
         catch (error) {
-            console.log(error);
+            logger.error(error);
         }
     }
 
@@ -79,7 +80,7 @@ class OrderManagerController {
             return res.status(200).send({message: 'Orden borrada', deletedOrder})
         } 
         catch (error) {
-            console.log(error);
+            logger.error(error);
         }
     }
 }

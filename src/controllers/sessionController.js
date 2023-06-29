@@ -1,5 +1,6 @@
 const { userModel } = require('../dao/mongo/models/usersModel')
 const { createHashedPass } = require('../utils/bcryptPass')
+const { logger } = require('../utils/logger')
 
 class sessionManagerController {
     loginFunction = async ( req , res ) => {
@@ -12,7 +13,7 @@ class sessionManagerController {
             
             res.redirect('/home')
         } catch (error) {
-            console.log(error);
+            logger.error(error);
         }
     }
 
@@ -42,7 +43,7 @@ class sessionManagerController {
     
             res.redirect('/home')
         } catch (error) {
-            console.log(error);
+            logger.error(error);
         }
     }
 

@@ -1,0 +1,25 @@
+warning: 
+warning: Alerta!
+warning: Alerta!
+error: undefined
+error: undefined
+error: undefined
+error: function ReferenceError() { [native code] }
+error: undefined
+warning: undefined
+error: undefined
+error: undefined
+error: undefined
+error: undefined
+error: undefined
+error: undefined
+warning: Soy un warning.
+error: Soy un error.
+fatal: Soy un fatal.
+warning: Soy un warning.
+warning: Soy un warning.
+error: Soy un error.
+fatal: Soy un fatal.
+warning: Soy un warning.
+error: Soy un error.
+fatal: Soy un fatal.

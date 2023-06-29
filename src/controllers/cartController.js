@@ -4,6 +4,7 @@ const { orderModel } = require("../dao/mongo/models/ordersModel");
 const { productsModel } = require("../dao/mongo/models/productsModel");
 const { userModel } = require("../dao/mongo/models/usersModel");
 const { OrderManagerMongo } = require("../dao/mongo/orderManagerMongo");
+const { logger } = require("../utils/logger");
 const { sendMailTransport } = require("../utils/nodemailer");
 
 const cartManager = new CartsDao()
@@ -29,7 +30,7 @@ class CartManagerController {
             })
         } 
         catch (error) {
-            console.log(error);
+            logger.error(error);
         }
     }
 
@@ -53,7 +54,7 @@ class CartManagerController {
             return res.status(200).render('carts', {newCart,noProducts})
         } 
         catch (error) {
-            console.log(error);
+            logger.error(error);
         }
     }
 
@@ -84,7 +85,7 @@ class CartManagerController {
             res.redirect('/home')
         } 
         catch (error) {
-            console.log(error);
+            logger.error(error);
         }
     }
 
@@ -101,7 +102,7 @@ class CartManagerController {
             res.redirect('/api/carts')
         } 
         catch (error) {
-            console.log(error);
+            logger.error(error);
         }
     }
 
@@ -115,7 +116,7 @@ class CartManagerController {
             })
         } 
         catch (error) {
-            console.log(error);
+            logger.error(error);
         }
     }
 
@@ -147,7 +148,7 @@ class CartManagerController {
             })
         } 
         catch (error) {
-            console.log(error);
+            logger.error(error);
         }
     }
 
@@ -196,13 +197,13 @@ class CartManagerController {
                         quantity: product.quantity
                     })
                     
-                    productDetail.stock - products.quantity
+                    productDetail.stock - products.quantity // No funciona
 
                     if (productDetail.stock === 0) {
                         productDetail.status = false
                     }
 
-                    await productsModel.findByIdAndUpdate({_id:product._id},{productDetail})
+                    await productsModel.findByIdAndUpdate({_id:productDetail._id},{productDetail})
                     
                     await orderModel.findByIdAndUpdate({_id:orderID}, order)
 
@@ -214,7 +215,7 @@ class CartManagerController {
 
             return res.render('purchase')
         } catch (error) {
-            console.log(error);
+            logger.error(error);
         }
     }
 }
