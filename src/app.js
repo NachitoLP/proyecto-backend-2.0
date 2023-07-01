@@ -34,6 +34,11 @@ app.use(express.urlencoded({ extended: true }))
 
 app.use(routerApp)
 
+exports.initServer = () => app.listen(portEnv, (err) => {
+    if(err) return logger.fatal('El servidor falló. Intentelo más tarde.');
+    logger.info(`Servidor escuchando en el puerto ${portEnv}`);
+})
+
 app.get('/' , async ( req , res ) => {
     res.redirect('/home')
 })
@@ -43,7 +48,7 @@ app.use(express.static( path.resolve(__dirname, '../public') ))
 
 // Routes
 
-const httpServer = app.listen(portEnv, (err) => {
+/* const httpServer = app.listen(portEnv, (err) => {
     if(err) return logger.fatal('El servidor falló. Intentelo más tarde.');
     logger.info(`Servidor escuchando en el puerto ${portEnv}`);
 })
@@ -52,7 +57,7 @@ const httpServer = app.listen(portEnv, (err) => {
 // Socket Chat
 
 const ioChat = new Server(httpServer)
-initChatSocket(ioChat)
+initChatSocket(ioChat) */
 
 
 // RealTime

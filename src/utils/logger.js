@@ -1,5 +1,4 @@
 const winston = require('winston')
-const { objConfig } = require('../config/config')
 
 // let enviroment = objConfig.enviroment // No lo acepta
 let enviroment = "development"

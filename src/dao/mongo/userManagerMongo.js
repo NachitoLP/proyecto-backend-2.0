@@ -27,8 +27,8 @@ class UserManagerMongo{
         })
     }
 
-    delete = async ( name ) => {
-        return await userModel.deleteOne({first_name:name})
+    delete = async ( username ) => {
+        return await userModel.deleteOne({username:username})
     }
 }
 

@@ -1,21 +1,17 @@
-const { CartsDao, UsersDao } = require("../dao/factory");
 const { cartModel } = require("../dao/mongo/models/cartsModel");
 const { orderModel } = require("../dao/mongo/models/ordersModel");
 const { productsModel } = require("../dao/mongo/models/productsModel");
 const { userModel } = require("../dao/mongo/models/usersModel");
-const { OrderManagerMongo } = require("../dao/mongo/orderManagerMongo");
+const { cartService, userService, orderService } = require("../service");
 const { logger } = require("../utils/logger");
 const { sendMailTransport } = require("../utils/nodemailer");
 
-const cartManager = new CartsDao()
-let userManager = new UsersDao()
-let orderManager = new OrderManagerMongo()
 
 class CartManagerController {
     getCarts = async ( req , res ) => {
         try {
             const {limit,page} = req.query;
-            const {docs, hasPrevPage, hasNextPage, prevPage, nextPage} = await cartManager.getCarts(limit,page)
+            const {docs, hasPrevPage, hasNextPage, prevPage, nextPage} = await cartService.get(limit,page)
     
             if (!docs) {
                 return res.status(400).send('No hay productos')
@@ -37,9 +33,9 @@ class CartManagerController {
     getCartByID = async ( req , res ) => {
         try {
             const username = req.session.user.username
-            const {cart_id} = await userManager.getByUsername(username)
+            const {cart_id} = await userService.getByUsername(username)
 
-            const newCart = await cartManager.getCartById(cart_id , username)
+            const newCart = await cartService.getById(cart_id , username)
 
             const newCart2 = await cartModel.findOne({_id:cart_id})
 
@@ -62,14 +58,14 @@ class CartManagerController {
         try {
             let username = req.body.username
 
-            const userInDB = await userManager.getByUsername(username)
+            const userInDB = await userService.getByUsername(username)
             let userID = userInDB._id
 
             if (userInDB.cart_id) {
                 return res.status(401).send('Este usuario ya tiene un carrito asociado.')
             }
 
-            const newCart = await cartManager.createCart({products: []})
+            const newCart = await cartService.create({products: []})
 
             let cartID = newCart._id
 
@@ -94,11 +90,11 @@ class CartManagerController {
             const { prodID } = req.params
             
             const username = req.session.user.username
-            let user = await userManager.getByUsername(username)
+            let user = await userService.getByUsername(username)
 
             let cartID = user.cart_id
 
-            await cartManager.addProductToCart( cartID , prodID )
+            await cartService.update( cartID , prodID )
             res.redirect('/api/carts')
         } 
         catch (error) {
@@ -109,7 +105,7 @@ class CartManagerController {
     deleteCart = async ( req , res ) => {
         try {
             const { cartID } = req.params
-            const deleteCart = await cartManager.deleteCart( cartID )
+            const deleteCart = await cartService.delete( cartID )
             res.status(200).send({
                 cart: deleteCart,
                 message: "Carrito borrado."
@@ -128,7 +124,7 @@ class CartManagerController {
 
             if (!cartID) {
                 const { cartID , prodID } = req.params
-                const deleteCart = await cartManager.deleteProductInCart( cartID , prodID )
+                const deleteCart = await cartService.deleteInCart( cartID , prodID )
                 return res.status(200).send({
                     cart: deleteCart,
                     message: "Producto borrado."
@@ -136,13 +132,13 @@ class CartManagerController {
             }
             if (!prodID) {
                 const { prodID } = req.params
-                const deleteCart = await cartManager.deleteProductInCart( cartID , prodID )
+                const deleteCart = await cartService.deleteInCart( cartID , prodID )
                 return res.status(200).send({
                     cart: deleteCart,
                     message: "Producto borrado."
                 })
             }
-            await cartManager.deleteProductInCart( cartID , prodID )
+            await cartService.deleteInCart( cartID , prodID )
             return res.status(200).send({
                 message: "Producto borrado."
             })
@@ -155,7 +151,7 @@ class CartManagerController {
     purchaseCart = async ( req , res ) => {
         try {
             const username = req.session.user.username
-            let user = await userManager.getByUsername(username)
+            let user = await userService.getByUsername(username)
 
             let cartID = user.cart_id
             let cart = await cartModel.findOne({_id:cartID})
@@ -173,7 +169,7 @@ class CartManagerController {
                 _id:user._id
             })
 
-            let result = await orderManager.create(order)
+            let result = await orderService.create(order)
 
             let orderID = result._id
             

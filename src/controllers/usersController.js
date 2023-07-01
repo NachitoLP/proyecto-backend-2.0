@@ -1,13 +1,12 @@
-const { UsersDao } = require("../dao/factory");
+const { userService } = require("../service");
 const { logger } = require("../utils/logger");
-let userManager = new UsersDao()
 
 
 class UserManagerController {
     getUsers = async ( req , res ) => {
         try {
             const {limit,page=1} = req.query;
-            let {docs , hasPrevPage, hasNextPage, prevPage, nextPage} = await userManager.get(limit,page)
+            let {docs , hasPrevPage, hasNextPage, prevPage, nextPage} = await userService.get(limit,page)
             let userRol = (req.session.user.rol === "admin")
     
             return res.status(201).render('users', {
@@ -28,7 +27,7 @@ class UserManagerController {
         try {
             const {first_name} = req.params
             const {limit,page=1} = req.query;
-            let {docs , hasPrevPage, hasNextPage, prevPage, nextPage} = await userManager.getByName(first_name , limit , page)
+            let {docs , hasPrevPage, hasNextPage, prevPage, nextPage} = await userService.getByName(first_name , limit , page)
     
             if(docs.length === 0) {
                 return res.status(404).send("User not found.")
@@ -53,7 +52,7 @@ class UserManagerController {
             const { first_name , last_name , gender , email } = req.body
     
             let newUser = { first_name , last_name , gender , email }
-            userManager.create( newUser )
+            userService.create( newUser )
     
             return res.json({
                 message: 'Usuario creado.',

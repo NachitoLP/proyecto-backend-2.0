@@ -1,12 +1,12 @@
-const { ProductsDao } = require("../dao/factory");
+const { productService } = require("../service");
 const { logger } = require("../utils/logger");
-const productManager = new ProductsDao();
+
 
 class ProductManagerController {
     getProducts = async ( req , res ) => {
         try {
             const {limit , page} = req.query;
-            let {docs , hasPrevPage, hasNextPage, prevPage, nextPage} = await productManager.get(limit , page)
+            let {docs , hasPrevPage, hasNextPage, prevPage, nextPage} = await productService.get(limit , page)
     
             if (!docs) {
                 return res.status(400).send('No hay productos')
@@ -30,7 +30,7 @@ class ProductManagerController {
     getProductByID = async ( req , res) => {
         try {
             const {prodID} = req.params
-            let product = await productManager.getById(prodID)
+            let product = await productService.getById(prodID)
             return res.status(200).render('product_id' , {product})
         } catch (error) {
             logger.error(error);
@@ -46,7 +46,7 @@ class ProductManagerController {
             }
     
             const newProduct = { name , description , price , stock , code , status: true }
-            let result = await productManager.create(newProduct)
+            let result = await productService.create(newProduct)
     
             return res.status(201).send({
                 product: result,
@@ -67,7 +67,7 @@ class ProductManagerController {
                 return res.status(400).send("No se han completado todos los campos.")
             }
     
-            let result = await productManager.update( pid , product )
+            let result = await productService.update( pid , product )
     
             return res.status(201).send({
                 products: result,
@@ -83,7 +83,7 @@ class ProductManagerController {
         try {
             const { pid } = req.params
         
-            let deleteProduct = await productManager.delete(pid)
+            let deleteProduct = await productService.delete(pid)
             
             return res.status(200).send({message: 'Producto borrado', deleteProduct})
         } 

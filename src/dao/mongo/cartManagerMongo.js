@@ -3,7 +3,7 @@ const { userModel } = require("./models/usersModel");
 
 
 class CartManagerMongo{
-    getCarts = async (limit,page) => {
+    get = async (limit,page) => {
         let cart = await cartModel.paginate({},{limit:limit||10, page:page, lean:true})
         if(cart.length == 0) {
             return console.log("No existe ningún carrito.");
@@ -11,11 +11,11 @@ class CartManagerMongo{
         return cart
     }
     
-    createCart = async ( cart ) => {
+    create = async ( cart ) => {
         return await cartModel.create(cart)
     }
     
-    getCartById = async ( cartID , username ) => {
+    getById = async ( cartID , username ) => {
         let cart = await cartModel.find({_id:cartID})
         
         if(cart.length == 0) {
@@ -46,7 +46,7 @@ class CartManagerMongo{
         return cart
     }
 
-    addProductToCart = async ( cartID, prodID ) => {
+    addToCart = async ( cartID, prodID ) => {
         let cart = await cartModel.findOne({_id: cartID})
         let productFound = cart.products.findIndex(product => product._id == prodID)
 
@@ -66,11 +66,11 @@ class CartManagerMongo{
         return resp
     }
 
-    deleteCart = async ( cartID ) => {
+    delete = async ( cartID ) => {
         return await cartModel.deleteOne({_id:cartID})
     }
 
-    deleteProductInCart = async ( cartID , prodID ) => {
+    deleteInCart = async ( cartID , prodID ) => {
         let cart = await cartModel.findOne({_id: cartID})
         let productFound = cart.products.findIndex(product => product._id == prodID)
 
