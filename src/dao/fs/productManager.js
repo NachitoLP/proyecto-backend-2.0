@@ -5,7 +5,7 @@ class ProductManager {
     constructor(){
         this.route = route
     }
-    getProducts = async () => {
+    get = async () => {
         try {
             if (fs.existsSync(this.route)) {
                 const products = await fs.promises.readFile(this.route)
@@ -18,7 +18,7 @@ class ProductManager {
         }
     }
 
-    addProduct = async ( product ) => {
+    create = async ( product ) => {
         const products = await this.getProducts()
 
         if (products.length === 0) {
@@ -34,7 +34,7 @@ class ProductManager {
     }
 
 
-    getProductsById = async ( id ) => {
+    getById = async ( id ) => {
         const products = await this.getProducts();
 
         let productFound = products.find(product => product.id.toString() === id)
@@ -44,7 +44,7 @@ class ProductManager {
         console.log("producto no encontrado");
     }
 
-    deleteProductById = async ( id ) => {
+    delete = async ( id ) => {
         const products = await this.getProducts();
 
         let productFound = products.find(product => product.id.toString() === id)

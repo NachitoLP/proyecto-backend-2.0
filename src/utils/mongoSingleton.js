@@ -1,10 +1,11 @@
 const { connect } = require('mongoose');
 const { logger } = require('./logger');
+const { objConfig } = require('../config/config');
 class MongoSingleton {
     static #instance
 
     constructor() {
-        connect('mongodb+srv://Joaquin:joaquin030203@proyectdb.eauw9yn.mongodb.net/ecommerce?retryWrites=true&w=majority' , {
+        connect(objConfig.mongoURL , {
             useNewUrlParser: true,
             useUnifiedTopology: true
         })

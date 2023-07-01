@@ -1,7 +1,11 @@
-/* const { productsModel } = require('../dao/mongo/models/productsModel');
-const { generateProducts } = require('../utils/faker'); */
-const MongoSingleton = require('../utils/mongoSingleton');
-require('dotenv').config()
+const dotenv = require('dotenv')
+const commander = require('../utils/commander')
+
+const { mode } = commander.opts()
+
+dotenv.config({
+    path: mode == 'development' ? './.env.development' : './.env.production'
+})
 
 const objConfig = {
     persistence: process.env.PERSISTENCE,
@@ -14,22 +18,8 @@ const objConfig = {
     twilio_account_ID: process.env.ACCOUNT_ID,
     twilio_auth_ID: process.env.AUTH_TOKEN,
     twilio_phone: process.env.TWILIO_PHONE,
-    my_phone: process.env.JOAQUIN_PHONE,
-    enviroment: process.env.DEV_ENVIROMENT,
-    dbConnection: async() => {
-        MongoSingleton.getInstance()
-    }
+    my_phone: process.env.JOAQUIN_PHONE
 }
-
-/* let funcion = async () => {
-    for(let i = 0; i < 100; i++) {
-        let product = generateProducts()
-        await productsModel.create(product)
-    }
-    return console.log("HOLA");
-}
-
-funcion() */
 
 module.exports = {
     objConfig
