@@ -18,11 +18,11 @@ productRouter
 
     .get('/id/:prodID', getProductByID)
 
-    .post('/' , midSession , authRol("admin") , addProduct)
+    .post('/' , midSession , authRol("admin") || authRol("premium") , addProduct)
 
     .put('/name/:name' , midSession , authRol("admin") , updateProduct)
 
-    .delete('/name/:name' , midSession , authRol("admin") , deleteProduct)
+    .delete('/name/:name' , midSession , authRol("admin") || authRol("premium") , deleteProduct)
 
 
 module.exports = {

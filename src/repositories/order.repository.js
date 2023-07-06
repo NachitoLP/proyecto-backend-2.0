@@ -4,7 +4,7 @@ class OrderRepository {
     }
 
     async get() {
-        return await this.dao.get({})
+        return await this.dao.get()
     }
     async getById( oid ) {
         return await this.dao.getById( oid )

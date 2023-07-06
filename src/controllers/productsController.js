@@ -7,7 +7,6 @@ class ProductManagerController {
         try {
             const {limit , page} = req.query;
             let {docs , hasPrevPage, hasNextPage, prevPage, nextPage} = await productService.get(limit , page)
-    
             if (!docs) {
                 return res.status(400).send('No hay productos')
             }
@@ -45,7 +44,13 @@ class ProductManagerController {
                 return res.status(400).send("No se completaron todos los campos.")
             }
     
-            const newProduct = { name , description , price , stock , code , status: true }
+            
+            const newProduct = { name , description , price , stock , code , owner: "admin", status: true }
+
+            if(req.session.user.rol == "premium") {
+                newProduct.owner = req.session.user.email
+            }
+
             let result = await productService.create(newProduct)
     
             return res.status(201).send({
@@ -82,7 +87,19 @@ class ProductManagerController {
     deleteProduct = async ( req , res ) => {
         try {
             const { pid } = req.params
-        
+            
+            let product = await productService.getById(pid)
+            
+            if(req.session.user.rol == "premium") {
+                if(product.owner == req.session.user.email) {
+                    let deleteProduct = await productService.delete(pid)
+                    return res.status(200).send({message: 'Producto borrado', deleteProduct})
+                }
+                else{
+                    return res.status(401).send({status: 'error', message: "No puedes eliminar un producto que no es tuyo."})
+                }
+            }
+
             let deleteProduct = await productService.delete(pid)
             
             return res.status(200).send({message: 'Producto borrado', deleteProduct})

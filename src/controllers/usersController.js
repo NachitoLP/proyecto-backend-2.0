@@ -47,6 +47,35 @@ class UserManagerController {
         }
     }
 
+    changeRol = async ( req , res ) => {
+        try {
+            if(req.session.user.rol == "premium"){
+                let username = req.session.user.username
+                let user = await userService.getByUsername(username)
+
+                user.rol = "usuario"
+                await userService.update(user)
+
+                return res.status(201).send({status: 'success', message: `Rol cambiado correctamente. Ahora sos ${user.rol}.`})
+            }
+            else if(req.session.user.rol == "usuario") {
+                let username = req.session.user.username
+                let user = await userService.getByUsername(username)
+
+                user.rol = "premium"
+                await userService.update(user)
+
+                return res.status(201).send({status: 'success', message: `Rol cambiado correctamente. Ahora sos ${user.rol}.`})
+            }
+            else{
+                return res.status(401).send({status: 'error', message: 'Sos admin, no podés cambiar tu rol.'})
+            }
+        } 
+        catch (error) {
+            logger.error(error)
+        }
+    }
+
     createUser = async ( req , res ) => {
         try {
             const { first_name , last_name , gender , email } = req.body

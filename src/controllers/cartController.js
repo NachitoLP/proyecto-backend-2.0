@@ -2,7 +2,7 @@ const { cartModel } = require("../dao/mongo/models/cartsModel");
 const { orderModel } = require("../dao/mongo/models/ordersModel");
 const { productsModel } = require("../dao/mongo/models/productsModel");
 const { userModel } = require("../dao/mongo/models/usersModel");
-const { cartService, userService, orderService } = require("../service");
+const { cartService, userService, orderService, productService } = require("../service");
 const { logger } = require("../utils/logger");
 const { sendMailTransport } = require("../utils/nodemailer");
 
@@ -89,6 +89,22 @@ class CartManagerController {
         try {
             const { prodID } = req.params
             
+            if(req.session.user.rol == "premium") {
+                let product = await productService.getById(prodID)
+                if(product.owner == req.session.user.email){
+                    return res.status(401).send({status: 'error', message: 'No podes agregar al carrito un producto creado por vos.'})
+                }
+                else{
+                    const username = req.session.user.username
+                    let user = await userService.getByUsername(username)
+
+                    let cartID = user.cart_id
+
+                    await cartService.update( cartID , prodID )
+                    res.redirect('/api/carts')
+                }
+            }
+
             const username = req.session.user.username
             let user = await userService.getByUsername(username)
 

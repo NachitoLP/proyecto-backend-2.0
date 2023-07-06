@@ -4,7 +4,7 @@ class ProductRepository {
     }
 
     async get() {
-        return await this.dao.get({})
+        return await this.dao.get()
     }
     async getById( pid ) {
         return await this.dao.getById( pid )

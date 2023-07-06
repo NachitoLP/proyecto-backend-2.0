@@ -4,7 +4,7 @@ class CartRepository {
     }
 
     async get() {
-        return await this.dao.get({})
+        return await this.dao.get()
     }
     async getById( cid , username ) {
         return await this.dao.getById( cid , username )

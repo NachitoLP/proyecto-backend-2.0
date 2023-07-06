@@ -9,6 +9,7 @@ const {
     failedRegister,
     failedLogin,
     githubCallback,
+    mailRecoveryPassword,
     recoveryPassword,
     currentSession,
     logoutSession
@@ -37,6 +38,12 @@ sessionRouter
     .get('/github' , passport.authenticate('github'))
 
     .get('/githubcallback' , passport.authenticate('github', {failureRedirect:'/session/failedlogin'}) , githubCallback)
+
+    .get('/mail-recovery-password' , ( req , res ) => {
+        res.render('fill_mail_login')
+    })
+
+    .post('/mail-recovery-password' , mailRecoveryPassword)
 
     .get('/recovery-password' , ( req , res ) => {
         res.render('new_login')

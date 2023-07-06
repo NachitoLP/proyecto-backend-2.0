@@ -7,6 +7,7 @@ const userRouter = Router();
 const {
     getUsers,
     getUserByName,
+    changeRol,
     createUser
 } = new UserManagerController()
 
@@ -14,6 +15,8 @@ userRouter
     .get('/', authRol("admin") , getUsers)
 
     .get('/:first_name' , authRol("admin") , getUserByName)
+
+    .get('/premium/:uid' , changeRol)
 
     .post('/' , createUser)
 

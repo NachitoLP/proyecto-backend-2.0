@@ -11,6 +11,7 @@ exports.generateProducts = () => {
         href: "Sin imagen",
         code: faker.random.alphaNumeric(5),
         stock: faker.random.numeric(1),
+        owner: "admin",
         status: true
     }
     return product

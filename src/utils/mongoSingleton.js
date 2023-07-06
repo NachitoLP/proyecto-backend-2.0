@@ -18,7 +18,7 @@ class MongoSingleton {
         }
         this.#instance = new MongoSingleton()
         logger.info('Base de datos conectada.')
-        
+
         return this.#instance
     }
 }

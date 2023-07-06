@@ -4,7 +4,7 @@ class UserRepository {
     }
 
     async get() {
-        return await this.dao.get({})
+        return await this.dao.get()
     }
     async getByName( name ) {
         return await this.dao.getByName( name )

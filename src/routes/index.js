@@ -81,7 +81,7 @@ routerApp.use('/api/carts' , midSession , cartRouter)
 routerApp.use('/api/orders', midSession , ordersRouter)
 
 // View de Mail
-routerApp.use('/api/mail' , midSession , mailRouter)
+routerApp.use('/api/mail' , mailRouter)
 
 // View de SMS
 routerApp.use('/api/sms' , midSession , smsRouter)

@@ -21,7 +21,7 @@ const sendMailTransport = async (email , oid) => {
         html: `
             <h3>Su compra ha sido realizada con éxito.</h3>
             <div>
-                <p>Le dejamos el ID del ticket. No estaremos comunicando a la brevedad para acordar el envío.</p>
+                <p>Le dejamos el ID del ticket. Nos estaremos comunicando a la brevedad para acordar el envío.</p>
                 <p>ID: ${oid}</p>
             </div>
         `,
@@ -29,6 +29,22 @@ const sendMailTransport = async (email , oid) => {
     })
 }
 
+const sendRecoveryPassword = async (email , name) => {
+    transport.sendMail({
+        from: `${objConfig.gmail_user}`,
+        to: `${email}`,
+        subject: 'Reestablecimiento de contraseña.',
+        html: `
+            <h3>Buenas tardes, ${name}.</h3>
+            <div>
+                <p>En caso de querer reestablecer su contraseña, <a href="http://localhost:8080/session/recovery-password" target="_blank">haga click aquí.</a></p>
+            </div>
+        `,
+        attachments: []
+    })
+}
+
 module.exports = {
-    sendMailTransport
+    sendMailTransport,
+    sendRecoveryPassword
 }

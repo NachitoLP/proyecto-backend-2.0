@@ -31,6 +31,9 @@ const productSchema = new Schema({
         type: Number,
         required: true
     },
+    owner: {
+        type: String
+    },
     status: {
         type: Boolean
     }
