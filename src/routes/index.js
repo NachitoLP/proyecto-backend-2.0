@@ -3,6 +3,7 @@ const cookieParser = require('cookie-parser')
 const session = require('express-session')
 const { create } = require('connect-mongo')
 const passport = require('passport');
+const swaggerUiExpress = require('swagger-ui-express')
 
 const { userRouter } = require('./routers/userRouter');
 const { cartRouter } = require('./routers/cartRouter');
@@ -21,6 +22,7 @@ const { midSession } = require('../middleware/sessionMiddleware');
 const compression = require('express-compression');
 const mockingRouter = require('./routers/mockingProducts');
 const loggerRouter = require('./routers/loggerTest');
+const { specs } = require('../utils/swagger');
 
 const routerApp = Router()
 
@@ -91,6 +93,9 @@ routerApp.use('/api/mockingproducts' , midSession , mockingRouter)
 
 // View de logger
 routerApp.use('/api/loggerTest' , loggerRouter)
+
+// DOCUMENTACIÓN
+routerApp.use('/api/docs' , swaggerUiExpress.serve, swaggerUiExpress.setup(specs))
 
 routerApp.use(( err , req , res , next ) => {
     console.log(err);

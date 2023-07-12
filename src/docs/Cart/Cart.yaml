@@ -1,0 +1,132 @@
+paths:
+  /api/carts/:
+    get:
+      summary: Se muestra el carrito correspondiente al usuario logueado.
+      tags:
+        - Carts
+      responses:
+        '200':
+          description: El carrito ha sido traido con éxito.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Cart'
+        '500':
+          description: Error interno del servidor.
+  /api/carts/getCarts:
+    get:
+      summary: Aquellos usuarios con rol de "administrador" pueden ver todos los carritos creados.
+      tags:
+        - Carts
+      responses:
+        '200':
+          description: Los carritos han sido traidos con éxito.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Cart'
+        '400':
+          description: No se pueden ver los carritos debido a la falta de permisos del usuario.
+        '500':
+          description: Error interno del servidor.
+  /api/carts/purchase:
+    get:
+      summary: Se realiza la compra del carrito correspondiente al usuario logueado.
+      tags:
+        - Carts
+      responses:
+        '200':
+          description: La compra se ha realizado con éxito.
+        '500':
+          description: Error interno del servidor.
+  /api/carts/{pid}:
+    get:
+      summary: Se agrega el producto al carrito correspondiente al usuario logueado.
+      tags:
+        - Carts
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: El ID del producto que se desea agregar.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: El producto se ha agregado con éxito.
+        '400':
+          description: El producto <Nombre del producto> no cuenta con suficiente stock.
+        '500':
+          description: Error interno del servidor.
+  /api/carts/productDelete/{pid}:
+    get:
+      summary: Se elimina cierto producto del carrito correspondiente al usuario logueado.
+      tags:
+        - Carts
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: El ID del producto que se desea eliminar.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: El producto se ha eliminado con éxito.
+        '500':
+          description: Error interno del servidor.
+  /api/carts/{cid}:
+    delete:
+      summary: Aquellos usuarios con rol de "administrador" pueden eliminar un carrito en particular.
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: El ID del carrito que se desea eliminar.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: El carrito fue eliminado con éxito.
+        '400':
+          description: No se ha encontrado el carrito con ese ID.
+        '401':
+          description: No se puede eliminar el carrito debido a la falta de permisos del usuario.
+        '500':
+          description: Error interno del servidor.
+
+components:
+  schemas:
+    Cart:
+      type: object
+      properties:
+        products:
+          type: Object
+          description: Array que trae el ID del producto y la cantidad que se agregó al carrito.
+        user:
+          type: Object
+          description: Array que trae el ID del usuario dueño del carrito.
+      example:
+        _id: ObjectId("64828744c15a554dc0abdcbf")
+        products: []
+        user: [{_id: {ObjectId("648268b68d4bf5984b78f522")}}]
+  requestBodies:
+    updateCart:
+      type: object
+      properties:
+        products:
+          type: Object
+          description: Array que trae el ID del producto y la cantidad que se agregó al carrito.
+        user:
+          type: Object
+          description: Array que trae el ID del usuario dueño del carrito.
+      example:
+        _id: ObjectId("64828744c15a554dc0abdcbf")
+        products: []
+        user: [{_id: {ObjectId("648268b68d4bf5984b78f522")}}]

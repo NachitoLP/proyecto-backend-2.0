@@ -7,9 +7,7 @@ const {allowInsecurePrototypeAccess} = require('@handlebars/allow-prototype-acce
 
 const { objConfig } = require('./config/config');
 const { routerApp } = require('./routes');
-const initChatSocket = require('./utils/sockets/chatSocket');
-const initReal = require('./utils/sockets/realTimeSocket');
-const { addLogger, logger } = require('./utils/logger');
+const { logger } = require('./utils/logger');
 
 const app = express()
 

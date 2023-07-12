@@ -67,13 +67,26 @@ class ProductManagerController {
         try {
             const { pid } = req.params
             let product = req.body
-        
+
+            if(req.session.user.rol == "premium") {
+                if(product.owner == req.session.user.email) {
+                    if(!product.description || !product.price || !product.stock || !product.code) {
+                        return res.status(400).send("No se han completado todos los campos.")
+                    }
+                    let productUpdated = await productService.update(pid , product)
+                    return res.status(200).send({message: 'Producto actualizado.', productUpdated})
+                }
+                else{
+                    return res.status(401).send({status: 'error', message: "No puedes actualizar un producto que no es tuyo."})
+                }
+            }
+
             if(!product.description || !product.price || !product.stock || !product.code) {
                 return res.status(400).send("No se han completado todos los campos.")
             }
-    
+
             let result = await productService.update( pid , product )
-    
+
             return res.status(201).send({
                 products: result,
                 message: 'Success change'

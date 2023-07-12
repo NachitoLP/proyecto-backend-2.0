@@ -21,7 +21,7 @@ cartRouter
 
     .get('/productDelete/:prodID' , deleteProductInCart) // No funciona
 
-    .get('/', authRol("admin") , getCarts)
+    .get('/getCarts', authRol("admin") , getCarts)
 
     .delete('/:cartID' , authRol("admin") , deleteCart)
 
