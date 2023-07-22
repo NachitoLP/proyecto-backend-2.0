@@ -38,14 +38,14 @@ class ProductManagerController {
 
     addProduct = async ( req , res ) => {
         try {
-            const { name , description , price , stock , code } = req.body
+            const { title , description , price , stock , code } = req.body
     
-            if (!name || !description || !price || !stock || !code) {
+            if (!title || !description || !price || !stock || !code) {
                 return res.status(400).send("No se completaron todos los campos.")
             }
     
             
-            const newProduct = { name , description , price , stock , code , owner: "admin", status: true }
+            const newProduct = { title , description , price , stock , code , owner: "admin", status: true }
 
             if(req.session.user.rol == "premium") {
                 newProduct.owner = req.session.user.email
@@ -60,6 +60,7 @@ class ProductManagerController {
         } 
         catch (error) {
             logger.error(error);
+            console.log(error)
         }
     }
 
