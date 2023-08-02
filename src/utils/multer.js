@@ -1,16 +1,17 @@
 const multer = require('multer');
 const path = require('path')
 
-const storage = multer.diskStorage({
+const storage_profile = multer.diskStorage({
     destination: function( req , file, cb ){
-        cb(null , path.dirname(__dirname) + '/public/uploads')
+        cb(null , path.resolve(__dirname, '../uploads/profiles'))
     },
     filename: function( req , file , cb ){
         cb(null , file.originalname)
     }
-});
+})
 
-const uploaders = multer({storage})
+const profileMulter = multer({storage_profile})
+
 module.exports = {
-    uploaders
+    profileMulter
 }

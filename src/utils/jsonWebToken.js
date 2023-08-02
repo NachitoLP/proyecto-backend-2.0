@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken")
+const { objConfig } = require("../config/config")
 
-const PRIVATE_KEY = "CoderKey123"
+const PRIVATE_KEY = objConfig.private_key
 
 const generateToken = (user) => {
     const token = jwt.sign({
@@ -8,9 +9,19 @@ const generateToken = (user) => {
     }, 
     PRIVATE_KEY, 
     {
-        expiresIn: '12h'
+        expiresIn: '1h'
     })
     return token
+}
+
+const jwtStatus = (req , res) => {
+    const {token} = req.params
+    jwt.verify(token, PRIVATE_KEY , (error) => {
+        if (error) return res.status(401).send({status: 'error', message: 'Link expirado.'})
+        else {
+            res.render('new_login')
+        }
+    })
 }
 
 const authToken = ( req , res , next ) => {
@@ -22,7 +33,7 @@ const authToken = ( req , res , next ) => {
         token,
         PRIVATE_KEY,
         (error , credentials) => {
-            if (errror) return res.status(401).send({status: 'error', message: 'Usuario no autorizado.'})
+            if (error) return res.status(401).send({status: 'error', message: 'Usuario no autorizado.'})
             req.user = credentials.user
             next()
         }
@@ -31,5 +42,6 @@ const authToken = ( req , res , next ) => {
 
 module.exports = {
     generateToken,
-    authToken
+    authToken,
+    jwtStatus
 }

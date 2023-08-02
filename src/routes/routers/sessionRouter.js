@@ -45,11 +45,11 @@ sessionRouter
 
     .post('/mail-recovery-password' , mailRecoveryPassword)
 
-    .get('/recovery-password' , ( req , res ) => {
+    .get('/recovery-password/:token' , ( req , res ) => {
         res.render('new_login')
     })
 
-    .post('/recovery-password' , recoveryPassword)
+    .post('/recovery-password/:token' , recoveryPassword)
 
     .get('/current' , currentSession)
 

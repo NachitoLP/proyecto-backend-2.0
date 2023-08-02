@@ -2,6 +2,8 @@ const passport = require("passport")
 const { userModel } = require("../dao/mongo/models/usersModel")
 const { createHashedPass, checkValidPassword } = require("../utils/bcryptPass")
 const { UserDto } = require("../dto/userDto")
+const { cartService } = require("../service")
+const { cartModel } = require("../dao/mongo/models/cartsModel")
 const LocalStrategy = require("passport-local").Strategy
 const GitHubStrategy = require("passport-github2").Strategy
 
@@ -94,6 +96,19 @@ const initializePassport = () => {
                     }
                     const newUser = new UserDto(newUserDTO)
 
+                    const cart = await cartService.create({products: []})
+    
+                    let userID = newUser._id
+                    let cartID = cart._id
+    
+                    newUser.cart_id = cartID
+    
+                    cart.user.push({
+                        _id:userID
+                    })
+                    
+                    await cartModel.findByIdAndUpdate({_id: cartID}, cart)
+                    
                     const result = await userModel.create(newUser)
                     return done(null , result)
                 }

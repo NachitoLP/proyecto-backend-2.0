@@ -33,7 +33,9 @@ class CartManagerController {
     getCartByID = async ( req , res ) => {
         try {
             const username = req.session.user.username
-            const {cart_id} = await userService.getByUsername(username)
+            const user = await userService.getByUsername(username)
+
+            let cart_id = user.cart_id
 
             const newCart = await cartService.getById(cart_id , username)
 

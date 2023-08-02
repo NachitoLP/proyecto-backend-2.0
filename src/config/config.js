@@ -18,7 +18,8 @@ const objConfig = {
     twilio_account_ID: process.env.ACCOUNT_ID,
     twilio_auth_ID: process.env.AUTH_TOKEN,
     twilio_phone: process.env.TWILIO_PHONE,
-    my_phone: process.env.JOAQUIN_PHONE
+    my_phone: process.env.JOAQUIN_PHONE,
+    private_key: process.env.PRIVATE_KEY || "CoderKey123"
 }
 
 module.exports = {

@@ -29,7 +29,7 @@ const sendMailTransport = async (email , oid) => {
     })
 }
 
-const sendRecoveryPassword = async (email , name) => {
+const sendRecoveryPassword = async (email , name , link) => {
     transport.sendMail({
         from: `${objConfig.gmail_user}`,
         to: `${email}`,
@@ -37,7 +37,7 @@ const sendRecoveryPassword = async (email , name) => {
         html: `
             <h3>Buenas tardes, ${name}.</h3>
             <div>
-                <p>En caso de querer reestablecer su contraseña, <a href="http://localhost:8080/session/recovery-password" target="_blank">haga click aquí.</a></p>
+                <p>En caso de querer reestablecer su contraseña, <a href=${link} target="_blank">haga click aquí.</a></p>
             </div>
         `,
         attachments: []
