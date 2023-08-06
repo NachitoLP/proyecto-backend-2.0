@@ -44,7 +44,39 @@ const sendRecoveryPassword = async (email , name , link) => {
     })
 }
 
+const sendDeleteAccountMail = async ( email , name ) => {
+    transport.sendMail({
+        from: `${objConfig.gmail_user}`,
+        to: `${email}`,
+        subject: 'Borrado de cuenta.',
+        html: `
+            <h3>Buenas tardes, ${name}.</h3>
+            <div>
+                <p>Le avisamos que su cuenta fue eliminada de nuestro sistema por inactividad. Para volver a registrarse, <a href="http://localhost:8080/session/register">ingrese aquí.</a></p>
+            </div>
+        `,
+        attachments: []
+    })
+} 
+
+const sendDeleteProductMail = async ( email , name ) => {
+    transport.sendMail({
+        from: `${objConfig.gmail_user}`,
+        to: `${email}`,
+        subject: 'Borrado de producto.',
+        html: `
+            <h3>Buenas tardes, estimado/a.</h3>
+            <div>
+                <p>Le avisamos que su producto ${name} fue eliminado de nuestro sistema.</p>
+            </div>
+        `,
+        attachments: []
+    })
+} 
+
 module.exports = {
     sendMailTransport,
-    sendRecoveryPassword
+    sendRecoveryPassword,
+    sendDeleteAccountMail,
+    sendDeleteProductMail
 }

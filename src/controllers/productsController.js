@@ -1,5 +1,6 @@
 const { productService } = require("../service");
 const { logger } = require("../utils/logger");
+const { sendDeleteProductMail } = require("../utils/nodemailer");
 
 
 class ProductManagerController {
@@ -107,6 +108,8 @@ class ProductManagerController {
             if(req.session.user.rol == "premium") {
                 if(product.owner == req.session.user.email) {
                     let deleteProduct = await productService.delete(pid)
+                    await sendDeleteProductMail(product.owner, product.title)
+                    
                     return res.status(200).send({message: 'Producto borrado', deleteProduct})
                 }
                 else{
@@ -114,6 +117,9 @@ class ProductManagerController {
                 }
             }
 
+            if (product.owner != "admin") {
+                await sendDeleteProductMail(product.owner, product.title)
+            }
             let deleteProduct = await productService.delete(pid)
             
             return res.status(200).send({message: 'Producto borrado', deleteProduct})

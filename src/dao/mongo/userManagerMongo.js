@@ -18,13 +18,8 @@ class UserManagerMongo{
         return await userModel.create(newUser)
     }
 
-    update = async ( name , data ) => {
-        return await userModel.updateOne({first_name:name}, {
-            first_name: data.first_name,
-            last_name: data.last_name,
-            email: data.email,
-            gender: data.gender
-        })
+    update = async ( data ) => {
+        return await userModel.updateOne({username: data.username}, data)
     }
 
     delete = async ( username ) => {

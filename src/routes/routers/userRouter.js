@@ -9,15 +9,17 @@ const {
     getUsers,
     getUserByName,
     changeRol,
-    createUser
+    createUser,
+    deleteAllInactive,
+    deleteUser
 } = new UserManagerController()
 
 userRouter
     .get('/', authRol("admin") , getUsers)
 
-    .get('/:first_name' , authRol("admin") , getUserByName)
+    .get('/userByName/:first_name' , authRol("admin") , getUserByName)
 
-    .get('/premium/:uid' , changeRol)
+    .get('/premium/:username' , changeRol)
 
     .post('/' , createUser)
 
@@ -28,6 +30,10 @@ userRouter
     .post('/a/documents' , profileMulter.single('profile_picture') , async ( req , res ) => {
         res.send("Se ha subido el archivo.")
     })
+
+    .get('/delete-inactive' , authRol("admin") , deleteAllInactive)
+
+    .get('/delete/:username' , authRol("admin") , deleteUser)
 
 module.exports = {
     userRouter

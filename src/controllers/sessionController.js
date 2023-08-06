@@ -126,6 +126,9 @@ class sessionManagerController {
     }
 
     logoutSession = async ( req , res ) => {
+        if(!req.session.user) {
+            return res.redirect('/home')
+        }
         const {email} = req.session.user
 
         try {

@@ -38,6 +38,11 @@
                 <p><b>Apellido:</b> {{this.last_name}}</p>
                 <p style="margin:0px;"><b>Email:</b></p>
                 <p style="margin:5px;">{{this.email}}</p>
+                <p style="margin:10px;"><b>Rol:</b> {{this.rol}}</p>
+                <div style="display: flex;flex-direction:column;margin:10px">    
+                    <a href="http://localhost:8080/api/users/premium/{{this.username}}" class="btn_user" style="margin-bottom:5px">Cambiar rol</a>
+                    <a href="http://localhost:8080/api/users/delete/{{this.username}}" class="btn_user">Eliminar</a>
+                </div>
             </div>
         {{/each}}
     </div>

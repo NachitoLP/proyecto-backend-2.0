@@ -1,5 +1,6 @@
 const { userService } = require("../service");
 const { logger } = require("../utils/logger");
+const { sendDeleteAccountMail } = require("../utils/nodemailer");
 
 
 class UserManagerController {
@@ -50,28 +51,44 @@ class UserManagerController {
     changeRol = async ( req , res ) => {
         try {
             if(req.session.user.rol == "premium"){
-                let username = req.session.user.username
+                let {username} = req.session.user
                 let user = await userService.getByUsername(username)
-
+                
                 user.rol = "usuario"
-                await userService.update(user)
+                req.session.user.rol = "usuario"
 
+                await userService.update(user)
+                
                 return res.status(201).send({status: 'success', message: `Rol cambiado correctamente. Ahora sos ${user.rol}.`})
             }
             else if(req.session.user.rol == "usuario") {
-                let username = req.session.user.username
+                let {username} = req.session.user
                 let user = await userService.getByUsername(username)
-
+                
                 user.rol = "premium"
-                await userService.update(user)
+                req.session.user.rol = "premium"
 
+                await userService.update(user)
+                
                 return res.status(201).send({status: 'success', message: `Rol cambiado correctamente. Ahora sos ${user.rol}.`})
             }
             else{
-                return res.status(401).send({status: 'error', message: 'Sos admin, no podés cambiar tu rol.'})
+                const {username} = req.params
+                let user = await userService.getByUsername(username)
+
+                if(user.rol == "premium"){
+                    user.rol = "usuario"
+                }
+                else{
+                    user.rol = "premium"
+                }
+                
+                await userService.update(user)
+                return res.status(201).send({status: 'success', message: `Rol cambiado correctamente. Ahora el usuario es ${user.rol}.`})
             }
         } 
         catch (error) {
+            console.log(error);
             logger.error(error)
         }
     }
@@ -90,6 +107,41 @@ class UserManagerController {
         } 
         catch (error) {
             logger.error(error);
+        }
+    }
+
+    deleteAllInactive = async ( req , res ) => {
+        try {
+            let { docs } = await userService.get()
+            let newDay = new Date()
+            docs.forEach(async user => {
+                let day = user.last_connection
+                if(newDay.getDate() - day.getDate() > 2){
+                    await userService.delete(user.username)
+                    await sendDeleteAccountMail(user.email , user.full_name)
+                }
+            })
+            res.status(200).send({
+                status:"succesful",
+                message:"Los usuarios con más de 2 días de inactividad han sido eliminados."
+            })
+        } 
+        catch (error) {
+            console.log(error)
+        }
+    }
+
+    deleteUser = async ( req , res ) => {
+        try {
+            let {username} = req.params
+            await userService.delete(username)
+            return res.status(200).send({
+                status:"succesful",
+                message:"El usuario se ha eliminado con éxito."
+            })
+        } 
+        catch (error) {
+            console.log(error)
         }
     }
 }

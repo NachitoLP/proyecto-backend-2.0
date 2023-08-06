@@ -88,12 +88,17 @@
   justify-content: center; }
   .div_padre_users .div_users {
     margin: 20px;
-    width: 200px;
-    height: 200px;
+    min-width: 250px;
+    width: max-content;
+    height: max-content;
     border: 3px solid black;
     text-align: center; }
     .div_padre_users .div_users p {
       margin: 20px 0px; }
+    .div_padre_users .div_users .btn_user {
+      color: white;
+      background-color: #ff006a;
+      border-radius: 5px; }
 
 .new_product_title {
   margin: auto;

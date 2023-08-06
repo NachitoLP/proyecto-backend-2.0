@@ -6,13 +6,19 @@
     justify-content: center;
     .div_users{
         margin: 20px;
-        width: 200px;
-        height: 200px;
+        min-width: 250px;
+        width: max-content;
+        height: max-content;
         border: 3px solid black;
         text-align: center;
     
         p{
             margin: 20px 0px
+        }
+        .btn_user {
+            color: white;
+            background-color: rgb(255, 0, 106);
+            border-radius: 5px;
         }
     }
 }

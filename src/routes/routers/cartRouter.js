@@ -17,13 +17,13 @@ cartRouter
 
     .get('/purchase' , purchaseCart)
 
-    .get('/:prodID' , addProductToCart)
+    .get('/add/:prodID' , addProductToCart)
 
-    .get('/productDelete/:prodID' , deleteProductInCart) // No funciona
-
+    .get('/delete/:prodID' , deleteProductInCart) // No funciona
+    
     .get('/getCarts', authRol("admin") , getCarts)
-
-    .delete('/:cartID' , authRol("admin") , deleteCart)
+    
+    .delete('/deleteCart/:cartID' , authRol("admin") , deleteCart)
 
 module.exports = {
     cartRouter
