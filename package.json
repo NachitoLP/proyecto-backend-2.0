@@ -20,6 +20,9 @@
   "bugs": {
     "url": "https://github.com/NachitoLP/proyecto-backend-2.0/issues"
   },
+  "engines": {
+    "node": ">=14 <15"
+  },
   "homepage": "https://github.com/NachitoLP/proyecto-backend-2.0#readme",
   "dependencies": {
     "@faker-js/faker": "^7.4.0",
