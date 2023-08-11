@@ -21,15 +21,7 @@ userRouter
 
     .get('/premium/:username' , changeRol)
 
-    .post('/' , createUser)
-
-    .get('/a/documents' , async ( req , res ) => {
-        res.render('uploadFiles')
-    })
-
-    .post('/a/documents' , profileMulter.single('profile_picture') , async ( req , res ) => {
-        res.send("Se ha subido el archivo.")
-    })
+    .post('/' , authRol("admin") ,createUser)
 
     .get('/delete-inactive' , authRol("admin") , deleteAllInactive)
 

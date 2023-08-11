@@ -20,9 +20,9 @@ productRouter
 
     .post('/' , midSession , authRol("admin") || authRol("premium") , addProduct)
 
-    .put('/name/:name' , midSession , authRol("admin") || authRol("premium") , updateProduct)
+    .put('/change/:name' , midSession , authRol("admin") || authRol("premium") , updateProduct)
 
-    .delete('/name/:name' , midSession , authRol("admin") || authRol("premium") , deleteProduct)
+    .delete('/delete/:name' , midSession , authRol("admin") || authRol("premium") , deleteProduct)
 
 
 module.exports = {

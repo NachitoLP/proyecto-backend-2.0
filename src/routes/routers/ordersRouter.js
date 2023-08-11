@@ -20,7 +20,7 @@ ordersRouter
 
     .put('/orderID' , updateOrder)
 
-    .delete('/:orderID', deleteOrder)
+    .delete('/delete/:orderID', deleteOrder)
 
 
 module.exports = {
