@@ -79,7 +79,7 @@ class sessionManagerController {
 
             const accessToken = generateToken(userFound)
             
-            let verificationLink = `http://localhost:8080/session/recovery-password/${accessToken}`
+            let verificationLink = `https://proyecto-backend-ar7b.onrender.com/session/recovery-password/${accessToken}`
 
             await sendRecoveryPassword( userFound.email , userFound.first_name , verificationLink )
 
