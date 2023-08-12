@@ -95,19 +95,23 @@ const initializePassport = () => {
                         rol: 'usuario'
                     }
                     const newUser = new UserDto(newUserDTO)
-
-                    const cart = await cartService.create({products: []})
-    
-                    let userID = newUser._id
-                    let cartID = cart._id
-    
-                    newUser.cart_id = cartID
-    
-                    cart.user.push({
-                        _id:userID
-                    })
                     
-                    await cartModel.findByIdAndUpdate({_id: cartID}, cart)
+                    if (!newUser.cart_id) {
+                        const cart = await cartService.create({products: []})
+                        let cartID = cart._id
+                        newUser.cart_id = cartID
+                        
+                        const result = await userModel.create(newUser)
+
+                        let userID = result._id
+                        
+                        cart.user.push({
+                            _id:userID
+                        })
+                        
+                        await cartModel.findByIdAndUpdate({_id: cartID}, cart)
+                        return done(null , result)
+                    }                
                     
                     const result = await userModel.create(newUser)
                     return done(null , result)
