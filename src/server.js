@@ -1,7 +1,9 @@
 const { initServer } = require("./app");
 const cluster = require('cluster');
 const { logger } = require("./utils/logger");
-const { cpus } = require('os')
+const { cpus } = require('os');
+const { Server } = require("socket.io");
+const initChatSocket = require("./utils/sockets/chatSocket");
 
 let numProcesadores = cpus().length
 
@@ -16,4 +18,6 @@ if (cluster.isPrimary) {
 } else {
     logger.info('No cuento como primario, isPrimary = false.')
 }
-initServer()
+
+const ioChat = new Server(initServer)
+initChatSocket(ioChat)
